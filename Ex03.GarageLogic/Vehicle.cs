@@ -52,5 +52,10 @@ namespace Ex03.GarageLogic
                 m_Engine = value;
             }
         }
+
+        public override int GetHashCode()
+        {
+            return m_LisenceNumber.GetHashCode();
+        }
     }
 }
