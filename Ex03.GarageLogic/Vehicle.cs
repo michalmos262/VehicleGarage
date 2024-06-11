@@ -10,9 +10,6 @@ namespace Ex03.GarageLogic
         protected float m_EnergyPercentageLeft;
         protected List<Tire> m_Tires;
         protected PowerSource m_Engine;
-        protected readonly int k_MaxTireAirPressure;
-        protected readonly float k_MaxFuelAmount;
-        protected readonly float k_MaxBatteryTimeInHours;
 
         protected Vehicle(string i_LisenceNumber)
         {
