@@ -52,7 +52,10 @@ namespace Ex03.GarageLogic
 
         public int EngineVolume
         {
-            get { return m_EngineVolumeInCC; }
+            get
+            {
+                return m_EngineVolumeInCC;
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
         protected string m_LisenceNumber;
         protected float m_EnergyPercentageLeft;
         protected List<Tire> m_Tires;
-        protected EnergySource m_Engine;
+        protected PowerSource m_Engine;
 
         protected Vehicle(string i_LisenceNumber)
         {
@@ -40,7 +40,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public EnergySource Engine
+        public PowerSource Engine
         {
             get
             {
