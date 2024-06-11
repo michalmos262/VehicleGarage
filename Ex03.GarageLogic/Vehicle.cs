@@ -5,7 +5,7 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        protected string m_ModelName;
+        protected string m_ManufactureName;
         protected string m_LisenceNumber;
         protected float m_EnergyPercentageLeft;
         protected List<Tire> m_Tires;
@@ -16,11 +16,11 @@ namespace Ex03.GarageLogic
             m_LisenceNumber = i_LisenceNumber;
         }
 
-        public string ModelName
+        public string ManufactureName
         {
             get
             {
-                return m_ModelName;
+                return m_ManufactureName;
             }
         }
 
@@ -56,6 +56,11 @@ namespace Ex03.GarageLogic
         public override int GetHashCode()
         {
             return m_LisenceNumber.GetHashCode();
+        }
+
+        public void AddTire(Tire i_Tire)
+        {
+            m_Tires.Add(i_Tire);
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Ex03.GarageLogic.Car;
 
 namespace Ex03.GarageLogic
@@ -27,13 +24,11 @@ namespace Ex03.GarageLogic
             Black
         }
 
-        public Car(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Car(string i_LisenceNumber, int i_NumOfDoors, eColor i_Color) : base(i_LisenceNumber)
         {
+            m_NumOfDoors = i_NumOfDoors;
+            m_Color = i_Color;
             m_Tires = new List<Tire>(k_NumOfTires);
-            for (int i = 0; i < k_NumOfTires; i++)
-            {
-                m_Tires.Add(new Tire(k_MaxTireAirPressure));
-            }
         }
 
         public eColor Color

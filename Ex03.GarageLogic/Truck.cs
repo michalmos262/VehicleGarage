@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
@@ -16,13 +13,11 @@ namespace Ex03.GarageLogic
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
 
-        public Truck(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Truck(string i_LisenceNumber, bool i_IsTransportingHazardousMaterials, float i_CargoVolume) : base(i_LisenceNumber)
         {
+            m_IsTransportingHazardousMaterials = i_IsTransportingHazardousMaterials;
+            m_CargoVolume = i_CargoVolume;
             m_Tires = new List<Tire>(k_NumOfTires);
-            for (int i = 0; i < k_NumOfTires; i++)
-            {
-                m_Tires.Add(new Tire(k_MaxTireAirPressure));
-            }
         }
 
         public bool IsTransportingHazardousMaterials

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using static Ex03.GarageLogic.Motorcycle;
 
 namespace Ex03.GarageLogic
@@ -25,13 +21,11 @@ namespace Ex03.GarageLogic
             B1
         }
 
-        public Motorcycle(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Motorcycle(string i_LisenceNumber, eLicenseType i_LicenseType, int i_EngineVolumeInCC) : base(i_LisenceNumber)
         {
+            m_LicenseType = i_LicenseType;
+            m_EngineVolumeInCC = i_EngineVolumeInCC;
             m_Tires = new List<Tire>(k_NumOfTires);
-            for (int i = 0; i < k_NumOfTires; i++)
-            {
-                m_Tires.Add(new Tire(k_MaxTireAirPressure));
-            }
         }
 
         public eLicenseType LicenseType
