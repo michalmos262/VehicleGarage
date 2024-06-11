@@ -2,7 +2,7 @@
 
 namespace Ex03.GarageLogic
 {
-    internal class FuelTank : EnergyTank
+    public class FuelTank : EnergyTank
     {
         private readonly eFuelType r_FuelType;
 

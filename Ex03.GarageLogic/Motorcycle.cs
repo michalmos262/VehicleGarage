@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using static Ex03.GarageLogic.FuelTank;
 using static Ex03.GarageLogic.Motorcycle;
 
 namespace Ex03.GarageLogic
@@ -8,7 +10,7 @@ namespace Ex03.GarageLogic
         private int m_EngineVolumeInCC;
         private const int k_NumOfTires = 2;
         private const int k_MaxTireAirPressure = 33;
-        private const eFuelType k_FuelType = eFuelType.Octan98;
+        private const FuelTank.eFuelType k_FuelType = FuelTank.eFuelType.Octan98;
         private const float k_MaxFuelAmount = 5.5f;
         private const float k_MaxBatteryTimeInHours = 2.5f;
         private eLicenseType m_LicenseType;
@@ -30,16 +32,19 @@ namespace Ex03.GarageLogic
 
         public eLicenseType LicenseType
         {
-            get { return m_LicenseType; }
+            get
+            {
+                return m_LicenseType;
+            }
             set
             {
-                if (!(value >= eLicenseType.A && value <= eLicenseType.B1))
+                if (Enum.IsDefined(typeof(eLicenseType), value))
                 {
-                    throw new ValueOutOfRangeException((int)eLicenseType.A, (int)eLicenseType.B1);
+                    m_LicenseType = value;
                 }
                 else
                 {
-                    m_LicenseType = value;
+                    //TODO: throw exception
                 }
             }
         }

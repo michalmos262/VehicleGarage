@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
         private float m_CargoVolume;
         private const int k_NumOfTires = 12;
         private const int k_MaxTireAirPressure = 28;
-        private const eFuelType k_FuelType = eFuelType.Soler;
+        private const FuelTank.eFuelType k_FuelType = FuelTank.eFuelType.Soler;
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
 

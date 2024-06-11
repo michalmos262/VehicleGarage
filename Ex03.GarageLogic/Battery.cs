@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    internal class Battery : EnergyTank
+    public class Battery : EnergyTank
     {
         public Battery(float i_MaximumTimeBatteryCanLast) : base(i_MaximumTimeBatteryCanLast)
         {

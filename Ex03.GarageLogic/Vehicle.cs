@@ -5,11 +5,11 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        protected string m_ManufactureName;
+        protected string m_ModelName;
         protected string m_LisenceNumber;
         protected float m_EnergyPercentageLeft;
         protected List<Tire> m_Tires;
-        protected PowerSource m_Engine;
+        protected EnergyTank m_Engine;
 
         protected Vehicle(string i_LisenceNumber)
         {
@@ -20,7 +20,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_ManufactureName;
+                return m_ModelName;
             }
         }
 
@@ -40,7 +40,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public PowerSource Engine
+        public EnergyTank Engine
         {
             get
             {

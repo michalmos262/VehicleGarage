@@ -12,7 +12,7 @@ namespace Ex03.GarageLogic
         private const int k_MaxNumOfDoors = 5;
         private const int k_NumOfTires = 5;
         private const int k_MaxTireAirPressure = 31;
-        private const eFuelType k_FuelType = eFuelType.Octan95;
+        private const FuelTank.eFuelType k_FuelType = FuelTank.eFuelType.Octan95;
         private const float k_MaxFuelAmount = 45f;
         private const float k_MaxBatteryTimeInHours = 3.5f;
 
@@ -51,13 +51,13 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                if (!(value >= k_MinNumOfDoors && value <= k_MaxNumOfDoors))
+                if (value >= k_MinNumOfDoors && value <= k_MaxNumOfDoors)
                 {
-                    throw new ValueOutOfRangeException(k_MinNumOfDoors, k_MaxNumOfDoors);
+                    m_NumOfDoors = value;
                 }
                 else
                 {
-                    m_NumOfDoors = value;
+                    throw new ValueOutOfRangeException(k_MinNumOfDoors, k_MaxNumOfDoors);
                 }
             }
         }
