@@ -17,8 +17,8 @@ namespace Ex03.GarageLogic
 
         public enum eFuelUnit
         {
-            Litres,
-            Gallons
+            Litres = 1,
+            Gallons = (int)0.264172f
         }
 
         public FuelTank(float i_MaxFuelAmount, eFuelType i_FuelType, eFuelUnit i_FuelUnit) : base(i_MaxFuelAmount)
@@ -31,11 +31,11 @@ namespace Ex03.GarageLogic
             // TODO: excpetion ???
         }
 
-        public void ReFuel(float i_AdditionalFuelAmount, eFuelType i_FuelType)
+        public void Refuel(float i_AdditionalFuelAmountInLiters, eFuelType i_FuelType)
         {
             if (r_FuelType == i_FuelType)
             {
-                CurrentEnergyAmount += i_AdditionalFuelAmount;
+                CurrentEnergyAmount += (i_AdditionalFuelAmountInLiters * (float)r_FuelUnit);
             }
             // TODO: else, execption
         }
