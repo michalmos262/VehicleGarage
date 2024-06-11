@@ -1,9 +1,9 @@
 ﻿namespace Ex03.GarageLogic
 {
-    abstract public class EnergyTank
+    public abstract class EnergyTank
     {
-        private float m_CurrentEnergyAmount;
-        private readonly float r_MaxEnergyAmount;
+        protected float m_CurrentEnergyAmount;
+        protected readonly float r_MaxEnergyAmount;
 
         public EnergyTank(float i_MaxEnergyAmount)
         {
@@ -13,7 +13,7 @@
 
         public float CurrentEnergyAmount
         {
-            get 
+            get
             { 
                 return m_CurrentEnergyAmount; 
             }
