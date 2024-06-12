@@ -68,7 +68,7 @@ namespace Ex03.GarageLogic
             {
                 //exception
             }
-            else if (areAllTiresAtCorrectMaxPressure(i_Tires) is false)
+            else if (areAllNewTiresAtCorrectMaxPressure(i_Tires) is false)
             {
                 //exception
             }
@@ -78,11 +78,11 @@ namespace Ex03.GarageLogic
             }
         }
 
-        private bool areAllTiresAtCorrectMaxPressure(List<Tire> i_Tires)
+        private bool areAllNewTiresAtCorrectMaxPressure(List<Tire> i_NewTires)
         {
             bool isTiresAtCorrectMaxPressure = true;
 
-            foreach (Tire tire in i_Tires)
+            foreach (Tire tire in i_NewTires)
             {
                 if (doesTireHasCorrectMaxPressure(tire) is false)
                 {
