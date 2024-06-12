@@ -24,11 +24,10 @@ namespace Ex03.GarageLogic
             Black
         }
 
-        public Car(string i_LisenceNumber, int i_NumOfDoors, eColor i_Color) : base(i_LisenceNumber)
+        public Car(string i_LisenceNumber, List<Tire> i_Tires, int i_NumOfDoors, eColor i_Color) : base(i_LisenceNumber, i_Tires)
         {
-            m_NumOfDoors = i_NumOfDoors;
-            m_Color = i_Color;
-            m_Tires = new List<Tire>(k_NumOfTires);
+              m_NumOfDoors = i_NumOfDoors;
+              m_Color = i_Color;
         }
 
         public eColor Color
@@ -57,9 +56,19 @@ namespace Ex03.GarageLogic
                 }
                 else
                 {
-                    throw new ValueOutOfRangeException(k_MinNumOfDoors, k_MaxNumOfDoors);
+                    //throw new ValueOutOfRangeException(k_MinNumOfDoors, k_MaxNumOfDoors);
                 }
             }
+        }
+        
+        protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
+        {
+            return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
+        }
+
+        protected override bool hasRequiredNumberOfTires(List<Tire> i_Tires)
+        {
+            return i_Tires.Count == k_NumOfTires;
         }
     }
 }

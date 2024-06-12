@@ -13,11 +13,10 @@ namespace Ex03.GarageLogic
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
 
-        public Truck(string i_LisenceNumber, bool i_IsTransportingHazardousMaterials, float i_CargoVolume) : base(i_LisenceNumber)
+        public Truck(string i_LisenceNumber, List<Tire> i_Tires, bool i_IsTransportingHazardousMaterials, float i_CargoVolume) : base(i_LisenceNumber, i_Tires)
         {
             m_IsTransportingHazardousMaterials = i_IsTransportingHazardousMaterials;
             m_CargoVolume = i_CargoVolume;
-            m_Tires = new List<Tire>(k_NumOfTires);
         }
 
         public bool IsTransportingHazardousMaterials
@@ -49,6 +48,16 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException(string.Format("Cargo Volume must be at least {0}", k_PossibleMinCargoVolume));
                 }
             }
+        }
+
+        protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
+        {
+            return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
+        }
+
+        protected override bool hasRequiredNumberOfTires(List<Tire> i_Tires)
+        {
+            return i_Tires.Count == k_NumOfTires;
         }
     }
 }

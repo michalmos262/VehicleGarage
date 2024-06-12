@@ -7,13 +7,24 @@ namespace Ex03.GarageLogic
     {
         protected string m_ModelName;
         protected string m_LisenceNumber;
-        protected float m_EnergyPercentageLeft;
         protected List<Tire> m_Tires;
         protected EnergyTank m_Engine;
 
-        protected Vehicle(string i_LisenceNumber)
+        protected Vehicle(string i_LisenceNumber, List<Tire> i_Tires)
         {
-            m_LisenceNumber = i_LisenceNumber;
+            if (hasRequiredNumberOfTires(i_Tires) is false)
+            {
+                //exception
+            }
+            else if (areAllTiresAtCorrectMaxPressure(i_Tires) is false)
+            {
+                //exception
+            }
+            else
+            {
+                m_LisenceNumber = i_LisenceNumber;
+                m_Tires = i_Tires;
+            }
         }
 
         public string ManufactureName
@@ -36,7 +47,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_EnergyPercentageLeft;
+                return m_Engine.CurrentEnergyAmount;
             }
         }
 
@@ -62,5 +73,24 @@ namespace Ex03.GarageLogic
         {
             m_Tires.Add(i_Tire);
         }
+
+        private bool areAllTiresAtCorrectMaxPressure(List<Tire> i_Tires)
+        {
+            bool isTiresAtCorrectMaxPressure = true;
+
+            foreach (Tire tire in i_Tires)
+            {
+                if (doesTireHasCorrectMaxPressure(tire) is false)
+                {
+                    isTiresAtCorrectMaxPressure = false;
+                    break;
+                }
+            }
+
+            return isTiresAtCorrectMaxPressure;
+        }
+
+        protected abstract bool doesTireHasCorrectMaxPressure(Tire i_Tire);
+        protected abstract bool hasRequiredNumberOfTires(List<Tire> i_Tires);
     }
 }
