@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    internal class Tire
+    public class Tire
     {
         private readonly string r_ManufacturerName;
         private float m_CurrentAirPressure;
@@ -46,7 +46,14 @@
 
         public void Inflate(float i_AdditionalAirPressure)
         {
-            m_CurrentAirPressure += i_AdditionalAirPressure;
+            if (m_CurrentAirPressure <= r_MaxAirPressureByManufacturer)
+            {
+                m_CurrentAirPressure += i_AdditionalAirPressure;
+            }
+            else
+            {
+                //TODO: throw exception
+            }
         }
     }
 }
