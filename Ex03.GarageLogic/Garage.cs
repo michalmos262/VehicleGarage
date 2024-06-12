@@ -34,7 +34,7 @@ namespace Ex03.GarageLogic
         {
             if (isVehicleInGarage(i_LisenceNumber) is false)
             {
-
+                m_RecordsBook.Add(new VehicleRecordInGarage(i_LisenceNumber, i_OwnerName, i_OwnerPhoneNumber));
             }
         }
 
@@ -74,5 +74,35 @@ namespace Ex03.GarageLogic
 
             return requestedVehicle;
         }
+
+        public void MakeNewTiresAndInsertThemToVehicle(string i_LisenceNumber, string i_TireManufacturerName)
+        {
+            Vehicle vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+            List<Tire> newTires; 
+
+            if (vehicle == null)
+            {
+                //exception
+            }
+            else // Vehicle already exists in system
+            {
+                newTires = makeNewTiresForVehicle(vehicle, i_TireManufacturerName);
+                vehicle.Tires = newTires;
+            }
+        }
+
+        private List<Tire> makeNewTiresForVehicle(Vehicle i_Vehicle, string i_ManufacturerName)
+        {
+            int i;
+            List <Tire> newTires = new List<Tire>(i_Vehicle.NumOfTires);
+
+            for (i = 0; i < i_Vehicle.NumOfTires; i++)
+            {
+                newTires.Add(new Tire(i_ManufacturerName, i_Vehicle.MaxTireAirPressure));
+            }
+
+            return newTires;
+        }
+
     }
 }

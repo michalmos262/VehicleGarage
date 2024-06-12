@@ -52,6 +52,32 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public List<Tire> Tires
+        {
+            get
+            {
+                return m_Tires;
+            }
+            set
+            {
+                if (hasRequiredNumberOfTires(value) is false)
+                {
+                    //throw exception
+                }
+                else if (areAllNewTiresAtCorrectMaxPressure(value) is false)
+                {
+                    //throw exception
+                }
+                else
+                {
+                    m_Tires = value;
+                }
+            }
+        }
+
+        public abstract int MaxTireAirPressure { get; }
+        public abstract int NumOfTires { get; }
+
         public override int GetHashCode()
         {
             return m_LisenceNumber.GetHashCode();
@@ -60,22 +86,6 @@ namespace Ex03.GarageLogic
         public void AddTire(Tire i_Tire)
         {
             m_Tires.Add(i_Tire);
-        }
-
-        public void InsertTires(List<Tire> i_Tires)
-        {
-            if (hasRequiredNumberOfTires(i_Tires) is false)
-            {
-                //exception
-            }
-            else if (areAllNewTiresAtCorrectMaxPressure(i_Tires) is false)
-            {
-                //exception
-            }
-            else
-            {
-                m_Tires = i_Tires;
-            }
         }
 
         private bool areAllNewTiresAtCorrectMaxPressure(List<Tire> i_NewTires)
@@ -95,6 +105,7 @@ namespace Ex03.GarageLogic
         }
 
         protected abstract bool doesTireHasCorrectMaxPressure(Tire i_Tire);
+
         protected abstract bool hasRequiredNumberOfTires(List<Tire> i_Tires);
     }
 }

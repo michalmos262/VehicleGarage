@@ -19,6 +19,14 @@ namespace Ex03.GarageLogic
             Paid
         }
 
+        public VehicleRecordInGarage(string i_LisenceNumber, string i_OwnerName, string i_OwnerPhoneNumber)
+        {
+            m_LisenceNumber = i_LisenceNumber;
+            m_OwnerName = i_OwnerName;
+            m_OwnerPhoneNumber = i_OwnerPhoneNumber;
+            m_VehicleStatus = eVehicleStatus.InRepair;
+        }
+
         public string LisenceNumber
         {
             get

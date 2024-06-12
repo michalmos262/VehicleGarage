@@ -59,6 +59,22 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public override int MaxTireAirPressure
+        {
+            get
+            {
+                return k_MaxTireAirPressure;
+            }
+        }
+
+        public override int NumOfTires
+        {
+            get
+            {
+                return k_NumOfTires;
+            }
+        }
+
         protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
         {
             return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
