@@ -23,17 +23,8 @@ namespace Ex03.GarageLogic
             B1
         }
 
-        public Motorcycle(string i_LisenceNumber, List<Tire> i_Tires, eLicenseType i_LicenseType, int i_EngineVolumeInCC) : base(i_LisenceNumber, i_Tires)
+        public Motorcycle(string i_LisenceNumber) : base(i_LisenceNumber)
         {
-            if (i_Tires.Count == k_NumOfTires)
-            {
-                m_LicenseType = i_LicenseType;
-                m_EngineVolumeInCC = i_EngineVolumeInCC;
-            }
-            else
-            {
-                //throw new ValueOutOfRangeException(0, k_NumOfTires);
-            }
         }
 
         public eLicenseType LicenseType
@@ -60,6 +51,10 @@ namespace Ex03.GarageLogic
             get
             {
                 return m_EngineVolumeInCC;
+            }
+            set
+            {
+                m_EngineVolumeInCC = value;
             }
         }
 

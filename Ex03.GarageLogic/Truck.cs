@@ -13,10 +13,8 @@ namespace Ex03.GarageLogic
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
 
-        public Truck(string i_LisenceNumber, List<Tire> i_Tires, bool i_IsTransportingHazardousMaterials, float i_CargoVolume) : base(i_LisenceNumber, i_Tires)
+        public Truck(string i_LisenceNumber) : base(i_LisenceNumber)
         {
-            m_IsTransportingHazardousMaterials = i_IsTransportingHazardousMaterials;
-            m_CargoVolume = i_CargoVolume;
         }
 
         public bool IsTransportingHazardousMaterials

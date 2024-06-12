@@ -24,10 +24,8 @@ namespace Ex03.GarageLogic
             Black
         }
 
-        public Car(string i_LisenceNumber, List<Tire> i_Tires, int i_NumOfDoors, eColor i_Color) : base(i_LisenceNumber, i_Tires)
+        public Car(string i_LisenceNumber) : base(i_LisenceNumber)
         {
-              m_NumOfDoors = i_NumOfDoors;
-              m_Color = i_Color;
         }
 
         public eColor Color
@@ -60,7 +58,7 @@ namespace Ex03.GarageLogic
                 }
             }
         }
-        
+
         protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
         {
             return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
