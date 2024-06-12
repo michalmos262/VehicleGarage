@@ -23,11 +23,8 @@ namespace Ex03.GarageLogic
             B1
         }
 
-        public Motorcycle(string i_LisenceNumber, eLicenseType i_LicenseType, int i_EngineVolumeInCC) : base(i_LisenceNumber)
+        public Motorcycle(string i_LisenceNumber) : base(i_LisenceNumber)
         {
-            m_LicenseType = i_LicenseType;
-            m_EngineVolumeInCC = i_EngineVolumeInCC;
-            m_Tires = new List<Tire>(k_NumOfTires);
         }
 
         public eLicenseType LicenseType
@@ -55,6 +52,20 @@ namespace Ex03.GarageLogic
             {
                 return m_EngineVolumeInCC;
             }
+            set
+            {
+                m_EngineVolumeInCC = value;
+            }
+        }
+
+        protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
+        {
+            return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
+        }
+
+        protected override bool hasRequiredNumberOfTires(List<Tire> i_Tires)
+        {
+            return i_Tires.Count == k_NumOfTires;
         }
     }
 }
