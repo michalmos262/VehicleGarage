@@ -23,7 +23,7 @@ namespace Ex03.GarageLogic
             B1
         }
 
-        public Motorcycle(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Motorcycle(string i_ModelName, string i_LisenceNumber) : base(i_ModelName, i_LisenceNumber)
         {
         }
 

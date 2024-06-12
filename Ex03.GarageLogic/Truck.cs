@@ -13,7 +13,7 @@ namespace Ex03.GarageLogic
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
 
-        public Truck(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Truck(string i_ModelName, string i_LisenceNumber) : base(i_ModelName, i_LisenceNumber)
         {
         }
 

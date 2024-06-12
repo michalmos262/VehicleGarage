@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
@@ -11,31 +8,28 @@ namespace Ex03.GarageLogic
         private List<Vehicle> m_Vehicles;
         private List<VehicleRecordInGarage> m_RecordsBook;
 
-        public VehicleRecordInGarage AddVehicleToSystem(Vehicle i_Vehicle, string i_OwnerName, string i_OwnerPhoneNumber)
+        public void AddVehicleToSystem(Vehicle i_Vehicle, string i_OwnerName, string i_OwnerPhoneNumber)
         {
-            AddNewVehicleRecordToBook(i_Vehicle.LisenceNumber, i_OwnerName, i_OwnerPhoneNumber);
-            return AddVehicleToGarage(i_Vehicle);
-        }
-
-        public VehicleRecordInGarage AddVehicleToGarage(Vehicle i_Vehicle)
-        {
-            VehicleRecordInGarage vehicleRecord;
-
-            vehicleRecord = getVehicleRecordByLisenceNumber(i_Vehicle.LisenceNumber);
-            if (vehicleRecord == null) // Need to make new car
+            if (isVehicleInGarage(i_Vehicle.LisenceNumber) is false)
             {
-
+                addVehicleToGarage(i_Vehicle);
+                addNewVehicleRecordToBook(i_Vehicle.LisenceNumber, i_OwnerName, i_OwnerPhoneNumber);
+            }
+            else
+            {
+                //exeption
             }
 
-            return vehicleRecord;
         }
 
-        public void AddNewVehicleRecordToBook(string i_LisenceNumber, string i_OwnerName, string i_OwnerPhoneNumber)
+        private void addVehicleToGarage(Vehicle i_Vehicle)
         {
-            if (isVehicleInGarage(i_LisenceNumber) is false)
-            {
-                m_RecordsBook.Add(new VehicleRecordInGarage(i_LisenceNumber, i_OwnerName, i_OwnerPhoneNumber));
-            }
+            makeNewTiresForVehicle(i_Vehicle, )
+        }
+
+        private void addNewVehicleRecordToBook(string i_LisenceNumber, string i_OwnerName, string i_OwnerPhoneNumber)
+        {
+            m_RecordsBook.Add(new VehicleRecordInGarage(i_LisenceNumber, i_OwnerName, i_OwnerPhoneNumber));
         }
 
         private VehicleRecordInGarage getVehicleRecordByLisenceNumber(string i_LisenceNumber)
@@ -104,5 +98,21 @@ namespace Ex03.GarageLogic
             return newTires;
         }
 
+        public void InflateVehicleTiresByLicenseNumber(string i_LisenceNumber)
+        {
+            Vehicle vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+
+            if (vehicle == null)
+            {
+                //exception
+            }
+            else
+            {
+                foreach (Tire tire in vehicle.Tires)
+                {
+                    tire.Inflate(tire.MaxAirPressure - tire.CurrentAirPressure);
+                }
+            }
+        }
     }
 }

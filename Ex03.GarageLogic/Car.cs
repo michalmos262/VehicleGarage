@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
             Black
         }
 
-        public Car(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Car(string i_ModelName, string i_LisenceNumber) : base(i_ModelName, i_LisenceNumber)
         {
         }
 
@@ -72,6 +72,14 @@ namespace Ex03.GarageLogic
             get
             {
                 return k_NumOfTires;
+            }
+        }
+
+        public FuelTank.eFuelType FuelType
+        {
+            get
+            {
+                return k_FuelType;
             }
         }
 
