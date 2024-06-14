@@ -13,6 +13,10 @@ namespace Ex03.GarageLogic
             {
                 m_VehicleRecords[i_Vehicle.LisenceNumber] = new VehicleRecordInGarage(i_Vehicle, i_OwnerName, i_OwnerPhoneNumber);
             }
+            else
+            {
+                //TODO: throw exception
+            }
         }
 
         private VehicleRecordInGarage getVehicleRecordByLisenceNumber(string i_LisenceNumber)
@@ -78,17 +82,10 @@ namespace Ex03.GarageLogic
             Vehicle vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
             float additionalAirPressureNeededForMaxPressure;
 
-            if (vehicle == null)
+            foreach (Tire tire in vehicle.Tires)
             {
-                //TODO: throw exception
-            }
-            else
-            {
-                foreach (Tire tire in vehicle.Tires)
-                {
-                    additionalAirPressureNeededForMaxPressure = tire.MaxAirPressure - tire.CurrentAirPressure;
-                    tire.Inflate(additionalAirPressureNeededForMaxPressure);
-                }
+                additionalAirPressureNeededForMaxPressure = tire.MaxAirPressure - tire.CurrentAirPressure;
+                tire.Inflate(additionalAirPressureNeededForMaxPressure);
             }
         }
     }
