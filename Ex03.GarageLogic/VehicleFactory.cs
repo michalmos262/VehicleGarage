@@ -12,23 +12,22 @@ namespace Ex03.GarageLogic
             Truck
         }
 
-        public Vehicle MakeNewVehicle(eVehicleType i_VehicleType, string i_ModelName, string i_LisenceNumber)
+        public Vehicle MakeNewVehicle(eVehicleType i_VehicleType, string i_LisenceNumber)
         {
             Vehicle newVehicle;
-            EnergyTank newEnergyTank;
 
             switch (i_VehicleType)
             {
                 case eVehicleType.FuelCar:
                 case eVehicleType.ElectricCar:
-                    newVehicle = new Car(i_ModelName, i_LisenceNumber);
+                    newVehicle = new Car(i_LisenceNumber);
                     break;
                 case eVehicleType.FuelMotorcycle:
                 case eVehicleType.ElectricMotorcycle:
-                    newVehicle = new Motorcycle(i_ModelName, i_LisenceNumber);
+                    newVehicle = new Motorcycle(i_LisenceNumber);
                     break;
                 case eVehicleType.Truck:
-                    newVehicle = new Truck(i_ModelName, i_LisenceNumber);
+                    newVehicle = new Truck(i_LisenceNumber);
                     break;
                 default:
                     //TODO: throw exception
@@ -54,7 +53,7 @@ namespace Ex03.GarageLogic
                     break;
                 case eVehicleType.ElectricCar:
                 case eVehicleType.ElectricMotorcycle:
-                    newEnergyTank = new Battery(i_NewVehicle.MaxTimeBatteryCanLast);
+                    newEnergyTank = new Battery(i_NewVehicle.MaxTimeBatteryCanLastInHours);
                     break;
                 default:
                     //TODO: throw exception

@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
             Black
         }
 
-        public Car(string i_ModelName, string i_LisenceNumber) : base(i_ModelName, i_LisenceNumber)
+        public Car(string i_LisenceNumber) : base(i_LisenceNumber)
         {
         }
 
@@ -75,7 +75,23 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public FuelTank.eFuelType FuelType
+        public override float MaxFuelAmount 
+        { 
+            get
+            {
+                return k_MaxFuelAmount;
+            }
+        }
+
+        public override float MaxTimeBatteryCanLastInHours 
+        { 
+            get
+            {
+                return k_MaxBatteryTimeInHours;
+            }
+        }
+
+        public override FuelTank.eFuelType FuelType
         {
             get
             {

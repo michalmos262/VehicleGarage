@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 namespace Ex03.GarageLogic
 {
     internal class VehicleRecordInGarage
     {
-        private readonly string m_LisenceNumber;
+        private Vehicle m_Vehicle;
         private readonly string m_OwnerName;
         private readonly string m_OwnerPhoneNumber;
         private eVehicleStatus m_VehicleStatus;
@@ -19,19 +16,27 @@ namespace Ex03.GarageLogic
             Paid
         }
 
-        public VehicleRecordInGarage(string i_LisenceNumber, string i_OwnerName, string i_OwnerPhoneNumber)
+        public VehicleRecordInGarage(Vehicle i_Vehicle, string i_OwnerName, string i_OwnerPhoneNumber)
         {
-            m_LisenceNumber = i_LisenceNumber;
+            m_Vehicle = i_Vehicle;
             m_OwnerName = i_OwnerName;
             m_OwnerPhoneNumber = i_OwnerPhoneNumber;
             m_VehicleStatus = eVehicleStatus.InRepair;
+        }
+
+        public Vehicle Vehicle
+        {
+            get
+            {
+                return m_Vehicle;
+            }
         }
 
         public string LisenceNumber
         {
             get
             {
-                return m_LisenceNumber;
+                return m_Vehicle.LisenceNumber;
             }
         }
 
@@ -49,7 +54,7 @@ namespace Ex03.GarageLogic
                 }
                 else
                 {
-                    throw new ArgumentException("Enum does not exits");
+                    throw new ArgumentException("Vehicle status is not correct");
                 }
             }
         }

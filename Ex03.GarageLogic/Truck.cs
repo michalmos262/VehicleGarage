@@ -13,7 +13,7 @@ namespace Ex03.GarageLogic
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
 
-        public Truck(string i_ModelName, string i_LisenceNumber) : base(i_ModelName, i_LisenceNumber)
+        public Truck(string i_LisenceNumber) : base(i_LisenceNumber)
         {
         }
 
@@ -61,6 +61,30 @@ namespace Ex03.GarageLogic
             get
             {
                 return k_NumOfTires;
+            }
+        }
+
+        public override float MaxFuelAmount
+        {
+            get
+            {
+                return k_MaxFuelAmount;
+            }
+        }
+
+        public override float MaxTimeBatteryCanLastInHours
+        {
+            get
+            {
+                throw new InvalidOperationException("Truck does not have a battery");
+            }
+        }
+
+        public override FuelTank.eFuelType FuelType
+        {
+            get
+            {
+                return k_FuelType;
             }
         }
 
