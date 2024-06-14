@@ -37,5 +37,7 @@
                 return r_MaxEnergyAmount;
             }
         }
+
+        public abstract void ReEnegrize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null);
     }
 }

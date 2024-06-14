@@ -23,13 +23,20 @@ namespace Ex03.GarageLogic
             // TODO: excpetion ???
         }
 
-        public void Refuel(float i_AdditionalFuelAmountInLiters, eFuelType i_FuelType)
+        public override void ReEnegrize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null)
         {
-            if (r_FuelType == i_FuelType)
+            if (!i_FuelType.HasValue)
             {
-                CurrentEnergyAmount += i_AdditionalFuelAmountInLiters;
+                throw new ArgumentNullException(nameof(i_FuelType));
             }
-            // TODO: else, execption
+            else if (i_FuelType != r_FuelType)
+            {
+                // TODO: execption
+            }
+            else
+            {
+                CurrentEnergyAmount += i_AdditionalEnergeyAmount;
+            }
         }
     }
 }

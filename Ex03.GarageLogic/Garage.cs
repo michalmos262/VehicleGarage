@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ex03.GarageLogic
 {
@@ -90,7 +91,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public void ChangeAllSpecificVehicleDetails(string i_LisenceNumber, List<string> i_AllSpecificVehicleTypeDetails)
+        public void ChangeAllVehicleSpecificDetails(string i_LisenceNumber, List<string> i_AllSpecificVehicleTypeDetails)
         {
             Vehicle vehicle;
 
@@ -103,6 +104,75 @@ namespace Ex03.GarageLogic
             {
                 // TODO
             }
+        }
+
+        public void ReFuelVehicle(string i_LisenceNumber, FuelTank.eFuelType i_FuelType, float i_AdditionalFuelInLiters)
+        {
+            Vehicle vehicle;
+
+            vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+            try
+            {
+                vehicle.Engine.ReEnegrize(i_AdditionalFuelInLiters, i_FuelType);
+            }
+            catch (Exception e)
+            {
+                // TODO
+            }
+        }
+
+        public void ReChargeVehicle(string i_LisenceNumber, float i_AdditionalChargingTimeInHours)
+        {
+            Vehicle vehicle;
+
+            vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+            try
+            {
+                vehicle.Engine.ReEnegrize(i_AdditionalChargingTimeInHours);
+            }
+            catch (Exception e)
+            {
+                // TODO
+            }
+        }
+
+        public void ChangeVehicleStatus(string i_LisenceNumber, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
+        {
+            VehicleRecordInGarage vehicleRecord;
+
+            vehicleRecord = getVehicleRecordByLisenceNumber(i_LisenceNumber);
+            vehicleRecord.VehicleStatus = i_NewVehicleStatus;
+        }
+
+        public List<string> GetLisenceNumbersList(VehicleRecordInGarage.eVehicleStatus? i_VehicleStatusFilter = null)
+        {
+            List<string> lisenceNumbersList;
+
+            if (i_VehicleStatusFilter.HasValue)
+            {
+                lisenceNumbersList = getLisenceNumbersListFilteredByStatus(i_VehicleStatusFilter.Value);
+            }
+            else
+            {
+                lisenceNumbersList = m_VehicleRecords.Keys.ToList();
+            }
+
+            return lisenceNumbersList;
+        }
+
+        private List<string> getLisenceNumbersListFilteredByStatus(VehicleRecordInGarage.eVehicleStatus i_VehicleStatusFilter)
+        {
+            List<string> lisenceNumbersListFilteredByStatus = new List<string>();
+
+            foreach (string lisenceNumber in m_VehicleRecords.Keys)
+            {
+                if (m_VehicleRecords[lisenceNumber].VehicleStatus == i_VehicleStatusFilter)
+                {
+                    lisenceNumbersListFilteredByStatus.Add(lisenceNumber);
+                }
+            }
+
+            return lisenceNumbersListFilteredByStatus.Count == 0 ? null : lisenceNumbersListFilteredByStatus;
         }
     }
 }

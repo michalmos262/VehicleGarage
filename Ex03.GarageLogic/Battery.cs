@@ -7,9 +7,13 @@
 
         }
 
-        public void Recharge(float i_AdditionalBatteryTimeInHours)
+        public override void ReEnegrize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null)
         {
-            CurrentEnergyAmount += i_AdditionalBatteryTimeInHours;
+            if (i_FuelType.HasValue)
+            {
+                // TODO: cant fuel a battery
+            }
+            CurrentEnergyAmount += i_AdditionalEnergeyAmount;
         }
     }
 }
