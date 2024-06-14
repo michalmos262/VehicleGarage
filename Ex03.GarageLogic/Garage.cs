@@ -29,7 +29,7 @@ namespace Ex03.GarageLogic
             }
             else
             {
-                throw new Exception($"Vehicle with lisence number {i_LisenceNumber} does not exists");
+                throw new Exception($"Vehicle with lisence number {i_LisenceNumber} does not exist");
             }
             
             return requestedVehicleRecord;
@@ -60,7 +60,7 @@ namespace Ex03.GarageLogic
             }
             catch (Exception e)
             {
-                throw new Exception("Can't make new tires for car that does not exists in the garage");
+                throw new Exception("Can't make new tires for car that does not exist in the garage");
             }
         }
 
@@ -79,13 +79,29 @@ namespace Ex03.GarageLogic
 
         public void InflateVehicleTiresToMaximumByLicenseNumber(string i_LisenceNumber)
         {
-            Vehicle vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+            Vehicle vehicle;
             float additionalAirPressureNeededForMaxPressure;
 
+            vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
             foreach (Tire tire in vehicle.Tires)
             {
                 additionalAirPressureNeededForMaxPressure = tire.MaxAirPressure - tire.CurrentAirPressure;
                 tire.Inflate(additionalAirPressureNeededForMaxPressure);
+            }
+        }
+
+        public void ChangeAllSpecificVehicleDetails(string i_LisenceNumber, List<string> i_AllSpecificVehicleTypeDetails)
+        {
+            Vehicle vehicle;
+
+            vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+            try
+            {
+                vehicle.VerifyAndSetAllSpecificVehicleTypeDetails(i_AllSpecificVehicleTypeDetails);
+            }
+            catch (Exception e)
+            {
+                // TODO
             }
         }
     }

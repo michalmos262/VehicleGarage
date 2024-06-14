@@ -23,7 +23,10 @@
                 {
                     m_CurrentEnergyAmount = value;
                 }
-                // TODO: add exception
+                else
+                {
+                    // TODO: add exception
+                }
             }
         }
 

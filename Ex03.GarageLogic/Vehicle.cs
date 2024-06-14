@@ -9,6 +9,7 @@ namespace Ex03.GarageLogic
         protected string m_LisenceNumber;
         protected List<Tire> m_Tires;
         protected EnergyTank m_Engine;
+        protected List<string> m_SpecificVehicleDetailsRequirementsAsStrings;
 
         protected Vehicle(string i_LisenceNumber)
         {
@@ -76,6 +77,14 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public List<string> SpecificVehicleDetailsRequirementsAsStrings
+        {
+            get
+            {
+                return m_SpecificVehicleDetailsRequirementsAsStrings;
+            }
+        }
+
         public abstract int MaxTireAirPressure { get; }
 
         public abstract int NumOfTires { get; }
@@ -85,8 +94,6 @@ namespace Ex03.GarageLogic
         public abstract float MaxTimeBatteryCanLastInHours { get; }
 
         public abstract FuelTank.eFuelType FuelType{ get; }
-
-
 
         public override int GetHashCode()
         {
@@ -112,5 +119,7 @@ namespace Ex03.GarageLogic
         protected abstract bool doesTireHasCorrectMaxPressure(Tire i_Tire);
 
         protected abstract bool hasRequiredNumberOfTires(List<Tire> i_Tires);
+
+        public abstract void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_SpecificVehicleTypeDetailsStrings);
     }
 }
