@@ -160,6 +160,7 @@ Please enter an option number (any other key to exit):
             vehicle.ModelName = Console.ReadLine();
             getVehicleTypeDetails(vehicle);
             getEnergyResourceDetails(vehicle.Engine);
+            vehicle.Tires = m_Garage.MakeNewTiresForVehicle(vehicle);
             getTiresDetails(vehicle.Tires);
             return vehicle;
         }
@@ -204,6 +205,7 @@ Please enter an option number (any other key to exit):
             else
             {
                 addNewVehicleToGarage(licenseNumber);
+                Console.WriteLine($"Vehicle was created successfully!");
             }
         }
 

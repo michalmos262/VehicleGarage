@@ -19,10 +19,7 @@ namespace Ex03.GarageLogic
 
         public Truck(string i_LicenseNumber) : base(i_LicenseNumber)
         {
-            for (int i = 0; i < k_NumOfTires; i++)
-            {
-                m_Tires.Add(new Tire(k_NumOfTires));
-            }
+            
         }
 
         public bool IsTransportingHazardousMaterials

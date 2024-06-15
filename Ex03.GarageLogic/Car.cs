@@ -30,10 +30,7 @@ namespace Ex03.GarageLogic
 
         public Car(string i_LicenseNumber) : base(i_LicenseNumber)
         {
-            for (int i = 0; i < k_NumOfTires; i++)
-            {
-                m_Tires.Add(new Tire(k_NumOfTires));
-            }
+            
         }
 
         public eColor Color

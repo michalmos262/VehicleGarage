@@ -41,29 +41,11 @@ namespace Ex03.GarageLogic
             return requestedVehicleRecord != null ? requestedVehicleRecord.Vehicle : null;
         }
 
-        public void MakeNewTiresAndInsertThemToVehicle(string i_LicenseNumber, string i_TireManufacturerName)
+        public List<Tire> MakeNewTiresForVehicle(Vehicle i_Vehicle)
         {
-            Vehicle vehicle;
-            List<Tire> newTires;
-
-            try
-            {
-                vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-                newTires = makeNewTiresForVehicle(vehicle, i_TireManufacturerName);
-                vehicle.Tires = newTires;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Can't make new tires for a car that does not exist in the garage");
-            }
-        }
-
-        private List<Tire> makeNewTiresForVehicle(Vehicle i_Vehicle, string i_ManufacturerName)
-        {
-            int i;
             List <Tire> newTires = new List<Tire>(i_Vehicle.NumOfTires);
 
-            for (i = 0; i < i_Vehicle.NumOfTires; i++)
+            for (int i = 0; i < i_Vehicle.NumOfTires; i++)
             {
                 newTires.Add(new Tire(i_Vehicle.MaxTireAirPressure));
             }
@@ -86,54 +68,25 @@ namespace Ex03.GarageLogic
 
         public void ChangeAllVehicleSpecificDetails(string i_LicenseNumber, List<string> i_AllSpecificVehicleTypeDetails)
         {
-            Vehicle vehicle;
-
-            vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            try
-            {
-                vehicle.setVehicleDetails(i_AllSpecificVehicleTypeDetails);
-            }
-            catch (Exception e)
-            {
-                // TODO
-            }
+            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
+            vehicle.setVehicleDetails(i_AllSpecificVehicleTypeDetails);
         }
 
         public void ReFuelVehicle(string i_LicenseNumber, FuelTank.eFuelType i_FuelType, float i_AdditionalFuelInLiters)
         {
-            Vehicle vehicle;
-
-            vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            try
-            {
-                vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
-            }
-            catch (Exception e)
-            {
-                // TODO
-            }
+            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
+            vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
         }
 
         public void ReChargeVehicle(string i_LicenseNumber, float i_AdditionalChargingTimeInHours)
         {
-            Vehicle vehicle;
-
-            vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            try
-            {
-                vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
-            }
-            catch (Exception e)
-            {
-                // TODO
-            }
+            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
+            vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
         }
 
         public void ChangeVehicleStatus(string i_LicenseNumber, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
         {
-            VehicleRecordInGarage vehicleRecord;
-
-            vehicleRecord = getVehicleRecordByLicenseNumber(i_LicenseNumber);
+            VehicleRecordInGarage vehicleRecord = getVehicleRecordByLicenseNumber(i_LicenseNumber);
             vehicleRecord.VehicleStatus = i_NewVehicleStatus;
         }
 

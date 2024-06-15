@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -13,7 +14,6 @@ namespace Ex03.GarageLogic
 
         protected Vehicle(string i_LicenseNumber)
         {
-            m_Tires = new List<Tire>();
             m_LicenseNumber = i_LicenseNumber;
         }
 
@@ -66,13 +66,13 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                if (hasRequiredNumberOfTires(value) is false)
+                if (!hasRequiredNumberOfTires(value))
                 {
-                    //TODO: throw exception
+                    throw new ArgumentException(string.Format("Invalid tires list length!"));
                 }
-                else if (areAllNewTiresAtCorrectMaxPressure(value) is false)
+                if (!areAllNewTiresAtCorrectMaxPressure(value))
                 {
-                    //TODO: throw exception
+                    throw new ArgumentException(string.Format("Not all tires have the right max air pressure!"));
                 }
                 else
                 {
