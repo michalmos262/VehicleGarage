@@ -113,7 +113,7 @@ namespace Ex03.GarageLogic
             vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
             try
             {
-                vehicle.Engine.ReEnegrize(i_AdditionalFuelInLiters, i_FuelType);
+                vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
             }
             catch (Exception e)
             {
@@ -128,7 +128,7 @@ namespace Ex03.GarageLogic
             vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
             try
             {
-                vehicle.Engine.ReEnegrize(i_AdditionalChargingTimeInHours);
+                vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
             }
             catch (Exception e)
             {
@@ -173,6 +173,59 @@ namespace Ex03.GarageLogic
             }
 
             return lisenceNumbersListFilteredByStatus.Count == 0 ? null : lisenceNumbersListFilteredByStatus;
+        }
+
+        public void UpdateModelName(string i_LisenceNumber, string i_ModelName)
+        {
+            Vehicle vehicle;
+
+            try
+            {
+                vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+                vehicle.ModelName = i_ModelName;
+            }
+            catch (Exception e)
+            {
+                // TODO
+            }
+        }
+
+        public Dictionary<string, string> GetAllVehicleDetails(string i_LisenceNumber)
+        {
+            Vehicle vehicle;
+            VehicleRecordInGarage vehicleRecord;
+            Dictionary<string, string> allVehicleDetails = new Dictionary<string, string>(), basicVehicleDetails, specificVehicleDetails;
+
+            vehicle = getVehicleByLisenceNumber(i_LisenceNumber);
+            vehicleRecord = getVehicleRecordByLisenceNumber(i_LisenceNumber);
+            allVehicleDetails.Add("owner name", string.IsNullOrEmpty(vehicleRecord.OwnerName) ? "" : vehicleRecord.OwnerName);
+            allVehicleDetails.Add("status", vehicleRecord.VehicleStatus.ToString());
+            basicVehicleDetails = getBasicVehicleInfo(vehicle);
+            allVehicleDetails = allVehicleDetails.Concat(basicVehicleDetails).ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Concat dictionaries
+            specificVehicleDetails = vehicle.GetSpecificVehicleTypeDetails();
+            allVehicleDetails = allVehicleDetails.Concat(specificVehicleDetails).ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Concat dictionaries
+
+            return allVehicleDetails;
+        }
+
+        private Dictionary<string, string> getBasicVehicleInfo(Vehicle i_Vehicle)
+        {
+            Dictionary<string, string> basicVehicleDetails = new Dictionary<string, string>(), energeyTankDetails;
+            
+            basicVehicleDetails.Add("license number", string.IsNullOrEmpty(i_Vehicle.LisenceNumber) ? "" : i_Vehicle.LisenceNumber);
+            basicVehicleDetails.Add("model", string.IsNullOrEmpty(i_Vehicle.ModelName) ? "" : i_Vehicle.ModelName);
+            energeyTankDetails = i_Vehicle.Engine.GetSpecificEnergeyTypeDetails();
+            basicVehicleDetails = basicVehicleDetails.Concat(energeyTankDetails).ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Concat dictionaries
+            if (i_Vehicle.Tires != null && i_Vehicle.Tires.Count > 0 && !string.IsNullOrEmpty(i_Vehicle.Tires[0].ManufacturerName))
+            {
+                basicVehicleDetails.Add("tires manufacturer", i_Vehicle.Tires[0].ManufacturerName);
+                for (int i = 0; i < i_Vehicle.Tires.Count; i++)
+                {
+                    basicVehicleDetails.Add($"air pressure in tire number {i + 1}", i_Vehicle.Tires[i].CurrentAirPressure.ToString());
+                }
+            }
+            
+            return basicVehicleDetails;
         }
     }
 }

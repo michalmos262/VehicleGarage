@@ -40,6 +40,14 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public string OwnerName
+        {
+            get
+            {
+                return m_OwnerName;
+            }
+        }
+
         public eVehicleStatus VehicleStatus
         {
             get

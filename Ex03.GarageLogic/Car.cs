@@ -161,5 +161,15 @@ namespace Ex03.GarageLogic
                 m_Color = color;
             }
         }
+
+        public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
+        {
+            Dictionary<string, string> SpecificCarDetails = new Dictionary<string, string>();
+
+            SpecificCarDetails.Add("number of doors", m_NumOfDoors.ToString());
+            SpecificCarDetails.Add("color", m_Color.ToString());
+
+            return SpecificCarDetails;
+        }
     }
 }

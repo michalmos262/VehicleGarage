@@ -136,5 +136,15 @@ namespace Ex03.GarageLogic
                 m_CargoVolume = cargoVolume;
             }
         }
+
+        public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
+        {
+            Dictionary<string, string> SpecificTruckDetails = new Dictionary<string, string>();
+
+            SpecificTruckDetails.Add("transporting hazardous materials", m_IsTransportingHazardousMaterials.ToString());
+            SpecificTruckDetails.Add("cargo volume", m_CargoVolume.ToString());
+
+            return SpecificTruckDetails;
+        }
     }
 }

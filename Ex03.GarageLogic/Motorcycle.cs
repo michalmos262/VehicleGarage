@@ -147,5 +147,15 @@ namespace Ex03.GarageLogic
                 m_EngineVolumeInCC = engineVolume;
             }
         }
+
+        public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
+        {
+            Dictionary<string, string> SpecificMotorcycleDetails = new Dictionary<string, string>();
+
+            SpecificMotorcycleDetails.Add("licence type", m_LicenseType.ToString());
+            SpecificMotorcycleDetails.Add("engine volume", m_EngineVolumeInCC.ToString());
+
+            return SpecificMotorcycleDetails;
+        }
     }
 }

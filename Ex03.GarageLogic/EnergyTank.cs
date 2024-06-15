@@ -1,4 +1,6 @@
-﻿namespace Ex03.GarageLogic
+﻿using System.Collections.Generic;
+
+namespace Ex03.GarageLogic
 {
     public abstract class EnergyTank
     {
@@ -38,6 +40,8 @@
             }
         }
 
-        public abstract void ReEnegrize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null);
+        public abstract void ReEnergize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null);
+
+        public abstract Dictionary<string, string> GetSpecificEnergeyTypeDetails();
     }
 }

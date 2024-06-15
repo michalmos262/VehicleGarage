@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -23,7 +24,7 @@ namespace Ex03.GarageLogic
             // TODO: excpetion ???
         }
 
-        public override void ReEnegrize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null)
+        public override void ReEnergize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null)
         {
             if (!i_FuelType.HasValue)
             {
@@ -37,6 +38,16 @@ namespace Ex03.GarageLogic
             {
                 CurrentEnergyAmount += i_AdditionalEnergeyAmount;
             }
+        }
+
+        public override Dictionary<string, string> GetSpecificEnergeyTypeDetails()
+        {
+            Dictionary<string, string> details = new Dictionary<string, string>();
+            
+            details.Add("Energey type", r_FuelType.ToString());
+            details.Add("Liters left in tank", m_CurrentEnergyAmount.ToString());
+
+            return details;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ex03.GarageLogic
 {
@@ -16,11 +17,15 @@ namespace Ex03.GarageLogic
             m_LisenceNumber = i_LisenceNumber;
         }
 
-        public string ManufactureName
+        public string ModelName
         {
             get
             {
                 return m_ModelName;
+            }
+            set
+            {
+                m_ModelName = value;
             }
         }
 
@@ -121,5 +126,7 @@ namespace Ex03.GarageLogic
         protected abstract bool hasRequiredNumberOfTires(List<Tire> i_Tires);
 
         public abstract void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_SpecificVehicleTypeDetailsStrings);
+
+        public abstract Dictionary<string, string> GetSpecificVehicleTypeDetails();
     }
 }
