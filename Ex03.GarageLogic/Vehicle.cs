@@ -9,6 +9,7 @@ namespace Ex03.GarageLogic
         protected string m_LisenceNumber;
         protected List<Tire> m_Tires;
         protected EnergyTank m_Engine;
+        protected List<string> m_SpecificVehicleDetailsRequirementsAsStrings;
 
         protected Vehicle(string i_LisenceNumber)
         {
@@ -52,37 +53,58 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public List<Tire> Tires
+        {
+            get
+            {
+                return m_Tires;
+            }
+            set
+            {
+                if (hasRequiredNumberOfTires(value) is false)
+                {
+
+                    //TODO: throw exception
+                }
+                else if (areAllNewTiresAtCorrectMaxPressure(value) is false)
+                {
+                    //TODO: throw exception
+                }
+                else
+                {
+                    m_Tires = value;
+                }
+            }
+        }
+
+        public List<string> SpecificVehicleDetailsRequirementsAsStrings
+        {
+            get
+            {
+                return m_SpecificVehicleDetailsRequirementsAsStrings;
+            }
+        }
+
+        public abstract int MaxTireAirPressure { get; }
+
+        public abstract int NumOfTires { get; }
+
+        public abstract float MaxFuelAmount { get; }
+
+        public abstract float MaxTimeBatteryCanLastInHours { get; }
+
+        public abstract FuelTank.eFuelType FuelType{ get; }
+
         public override int GetHashCode()
         {
             return m_LisenceNumber.GetHashCode();
         }
 
-        public void AddTire(Tire i_Tire)
-        {
-            m_Tires.Add(i_Tire);
-        }
-
-        public void InsertTires(List<Tire> i_Tires)
-        {
-            if (hasRequiredNumberOfTires(i_Tires) is false)
-            {
-                //exception
-            }
-            else if (areAllTiresAtCorrectMaxPressure(i_Tires) is false)
-            {
-                //exception
-            }
-            else
-            {
-                m_Tires = i_Tires;
-            }
-        }
-
-        private bool areAllTiresAtCorrectMaxPressure(List<Tire> i_Tires)
+        private bool areAllNewTiresAtCorrectMaxPressure(List<Tire> i_NewTires)
         {
             bool isTiresAtCorrectMaxPressure = true;
 
-            foreach (Tire tire in i_Tires)
+            foreach (Tire tire in i_NewTires)
             {
                 if (doesTireHasCorrectMaxPressure(tire) is false)
                 {
@@ -95,6 +117,9 @@ namespace Ex03.GarageLogic
         }
 
         protected abstract bool doesTireHasCorrectMaxPressure(Tire i_Tire);
+
         protected abstract bool hasRequiredNumberOfTires(List<Tire> i_Tires);
+
+        public abstract void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_SpecificVehicleTypeDetailsStrings);
     }
 }
