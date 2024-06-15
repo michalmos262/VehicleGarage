@@ -1,15 +1,16 @@
-﻿namespace Ex03.GarageLogic
+﻿using Ex03.GrarageLogic;
+
+namespace Ex03.GarageLogic
 {
     public class Tire
     {
-        private readonly string r_ManufacturerName;
+        private string m_ManufacturerName;
         private float m_CurrentAirPressure;
         private readonly float r_MaxAirPressureByManufacturer;
+        private const float k_MinAirPressure = 0;
 
-        public Tire(string i_ManufacturerName, float i_MaxAirPressureByManufacturer)
+        public Tire(float i_MaxAirPressureByManufacturer)
         {
-            r_ManufacturerName = i_ManufacturerName;
-            m_CurrentAirPressure = 0;
             r_MaxAirPressureByManufacturer = i_MaxAirPressureByManufacturer;
         }
 
@@ -17,7 +18,11 @@
         {
             get
             {
-                return r_ManufacturerName;
+                return m_ManufacturerName;
+            }
+            set
+            {
+                m_ManufacturerName = value;
             }
         }
 
@@ -33,6 +38,10 @@
                 {
                     m_CurrentAirPressure = value;
                 }
+                else
+                {
+                    throw new ValueOutOfRangeException(k_MinAirPressure, r_MaxAirPressureByManufacturer);
+                }
             }
         }
 
@@ -46,14 +55,7 @@
 
         public void Inflate(float i_AdditionalAirPressure)
         {
-            if (m_CurrentAirPressure <= r_MaxAirPressureByManufacturer)
-            {
-                m_CurrentAirPressure += i_AdditionalAirPressure;
-            }
-            else
-            {
-                //TODO: throw exception
-            }
+            CurrentAirPressure += i_AdditionalAirPressure;
         }
     }
 }

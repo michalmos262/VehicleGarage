@@ -10,11 +10,10 @@ namespace Ex03.GarageLogic
         private int m_EngineVolumeInCC;
         private eLicenseType m_LicenseType;
         private const int k_NumOfTires = 2;
-        private const int k_MaxTireAirPressure = 33;
-        private const FuelTank.eFuelType k_FuelType = FuelTank.eFuelType.Octan98;
+        private const float k_MaxTireAirPressure = 33f;
+        private const eFuelType k_FuelType = eFuelType.Octan98;
         private const float k_MaxFuelAmount = 5.5f;
         private const float k_MaxBatteryTimeInHours = 2.5f;
-        private const short k_NumOfSpecificVehicleDetails = 2;
         private const short k_LicenseTypeIndex = 0;
         private const short k_EngineVolumeIndex = 1;
 
@@ -26,9 +25,12 @@ namespace Ex03.GarageLogic
             B1
         }
 
-        public Motorcycle(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Motorcycle(string i_LicenseNumber) : base(i_LicenseNumber)
         {
-            initSpecificVehicleDetailsRequirements();
+            for (int i = 0; i < k_NumOfTires; i++)
+            {
+                m_Tires.Add(new Tire(k_NumOfTires));
+            }
         }
 
         public eLicenseType LicenseType
@@ -45,7 +47,7 @@ namespace Ex03.GarageLogic
                 }
                 else
                 {
-                    //TODO: throw exception
+                    throw new ArgumentException("License type is not correct!");
                 }
             }
         }
@@ -58,12 +60,19 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                m_EngineVolumeInCC = value;
+                if (value >= k_MinEngineVolume)
+                {
+                    m_EngineVolumeInCC = value;
+                }
+                else
+                {
+                    throw new ArgumentException(string.Format("Engine volume must be greater than {0}", k_MinEngineVolume));
+                }
             }
         }
 
-        public override int MaxTireAirPressure 
-        { 
+        public override float MaxTireAirPressure
+        {
             get
             {
                 return k_MaxTireAirPressure;
@@ -102,18 +111,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        private void initSpecificVehicleDetailsRequirements()
-        {
-            string LicenseTypeStr, EngineVolumeStr;
-
-            m_SpecificVehicleDetailsRequirementsAsStrings = new List<string>(k_NumOfSpecificVehicleDetails);
-            LicenseTypeStr = string.Format("1. License type. valid values: {0}, {1}, {2}, {3}", eLicenseType.A, eLicenseType.AA
-                , eLicenseType.B1, eLicenseType.A1);
-            EngineVolumeStr = string.Format("2. Engine volume in CC.");
-            m_SpecificVehicleDetailsRequirementsAsStrings[k_LicenseTypeIndex] = LicenseTypeStr;
-            m_SpecificVehicleDetailsRequirementsAsStrings[k_EngineVolumeIndex] = EngineVolumeStr;
-        }
-
         protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
         {
             return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
@@ -124,28 +121,44 @@ namespace Ex03.GarageLogic
             return i_Tires.Count == k_NumOfTires;
         }
 
-        public override void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_SpecificVehicleTypeDetailsStrings)
+        public override void setVehicleDetails(List<string> i_VehicleTypeDetails)
         {
             eLicenseType licenseType;
             int engineVolume;
 
-            if (i_SpecificVehicleTypeDetailsStrings == null || i_SpecificVehicleTypeDetailsStrings.Count != k_NumOfSpecificVehicleDetails)
+            if (!(Enum.TryParse(i_VehicleTypeDetails[k_LicenseTypeIndex], out licenseType)))
             {
-                //TODO: throw exception
+                throw new ArgumentException("License type must be a number!");
             }
-            else if (Enum.TryParse<eLicenseType>(i_SpecificVehicleTypeDetailsStrings[k_LicenseTypeIndex], out licenseType) is false)
+            if (!(int.TryParse(i_VehicleTypeDetails[k_EngineVolumeIndex], out engineVolume)))
             {
-                //TODO: throw exception
+                throw new ArgumentException("Engine volume in CC must be a number!");
             }
-            else if (int.TryParse(i_SpecificVehicleTypeDetailsStrings[k_EngineVolumeIndex], out engineVolume) is false)
+            LicenseType = licenseType;
+            EngineVolume = engineVolume;
+        }
+
+        public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
+        {
+            Dictionary<string, string> SpecificMotorcycleDetails = new Dictionary<string, string>();
+
+            SpecificMotorcycleDetails.Add("Licence type", m_LicenseType.ToString());
+            SpecificMotorcycleDetails.Add("Engine volume", m_EngineVolumeInCC.ToString());
+
+            return SpecificMotorcycleDetails;
+        }
+
+        public override List<string> RequestAdditionalVehicleDetails()
+        {
+            return new List<string>()
             {
-                //TODO: throw exception
-            }
-            else // All the details are valid
-            {
-                m_LicenseType = licenseType;
-                m_EngineVolumeInCC = engineVolume;
-            }
+                $@"Enter license type option:
+(1) {eLicenseType.A}
+(2) {eLicenseType.A1}
+(3) {eLicenseType.AA}
+(4) {eLicenseType.B1}",
+                "Enter the engine volume in CC:"
+            };
         }
     }
 }

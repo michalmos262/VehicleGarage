@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static Ex03.GarageLogic.FuelTank;
 
 namespace Ex03.GarageLogic
 {
@@ -8,17 +9,20 @@ namespace Ex03.GarageLogic
         private bool m_IsTransportingHazardousMaterials;
         private float m_CargoVolume;
         private const int k_NumOfTires = 12;
-        private const int k_MaxTireAirPressure = 28;
-        private const FuelTank.eFuelType k_FuelType = FuelTank.eFuelType.Soler;
+        private const float k_MaxTireAirPressure = 28f;
+        private const eFuelType k_FuelType = eFuelType.Soler;
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
         private const short k_NumOfSpecificVehicleDetails = 2;
         private const short k_IsTransportingHazardousMaterialsIndex = 0;
         private const short k_CargoVolumeIndex = 1;
 
-        public Truck(string i_LisenceNumber) : base(i_LisenceNumber)
+        public Truck(string i_LicenseNumber) : base(i_LicenseNumber)
         {
-            initSpecificVehicleDetailsRequirements();
+            for (int i = 0; i < k_NumOfTires; i++)
+            {
+                m_Tires.Add(new Tire(k_NumOfTires));
+            }
         }
 
         public bool IsTransportingHazardousMaterials
@@ -52,7 +56,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override int MaxTireAirPressure
+        public override float MaxTireAirPressure
         {
             get
             {
@@ -92,17 +96,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        private void initSpecificVehicleDetailsRequirements()
-        {
-            string isTransportingHazardousMaterialsStr, cargoVolumeStr;
-
-            m_SpecificVehicleDetailsRequirementsAsStrings = new List<string>(k_NumOfSpecificVehicleDetails);
-            isTransportingHazardousMaterialsStr = string.Format("1. Does the truck carry hazardous materials? valid values: yes, no.");
-            cargoVolumeStr = string.Format("2. Cargo volume.");
-            m_SpecificVehicleDetailsRequirementsAsStrings[k_IsTransportingHazardousMaterialsIndex] = isTransportingHazardousMaterialsStr;
-            m_SpecificVehicleDetailsRequirementsAsStrings[k_CargoVolumeIndex] = cargoVolumeStr;
-        }
-
         protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
         {
             return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
@@ -113,28 +106,45 @@ namespace Ex03.GarageLogic
             return i_Tires.Count == k_NumOfTires;
         }
 
-        public override void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_SpecificVehicleTypeDetailsStrings)
+        public override void setVehicleDetails(List<string> i_VehicleTypeDetails)
         {
             float cargoVolume;
 
-            if (i_SpecificVehicleTypeDetailsStrings == null || i_SpecificVehicleTypeDetailsStrings.Count != k_NumOfSpecificVehicleDetails)
+            if (float.TryParse(i_VehicleTypeDetails[k_CargoVolumeIndex], out cargoVolume))
             {
-                //TODO: throw exception
+                CargoVolume = cargoVolume;
             }
-            else if (float.TryParse(i_SpecificVehicleTypeDetailsStrings[k_CargoVolumeIndex], out cargoVolume) is false)
+            else
             {
-                //TODO: throw exception
+                throw new FormatException("Cargo volume must be a positive number!");
             }
-            else if (i_SpecificVehicleTypeDetailsStrings[k_IsTransportingHazardousMaterialsIndex] != "yes"
-                && i_SpecificVehicleTypeDetailsStrings[k_IsTransportingHazardousMaterialsIndex] != "no")
+            if (i_VehicleTypeDetails[k_IsTransportingHazardousMaterialsIndex] == "yes")
             {
-                //TODO: throw exception
+                m_IsTransportingHazardousMaterials = true;
             }
-            else // All the details are valid
+            else
             {
-                m_IsTransportingHazardousMaterials = i_SpecificVehicleTypeDetailsStrings[k_IsTransportingHazardousMaterialsIndex] == "yes";
-                m_CargoVolume = cargoVolume;
+                m_IsTransportingHazardousMaterials = false;
             }
+        }
+
+        public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
+        {
+            Dictionary<string, string> SpecificTruckDetails = new Dictionary<string, string>();
+
+            SpecificTruckDetails.Add("Transporting hazardous materials", m_IsTransportingHazardousMaterials.ToString());
+            SpecificTruckDetails.Add("Cargo volume", m_CargoVolume.ToString());
+
+            return SpecificTruckDetails;
+        }
+
+        public override List<string> RequestAdditionalVehicleDetails()
+        {
+            return new List<string>()
+            {
+                $@"Enter the cargo volume:",
+                "Is the truck transporting hazardous materials? Enter 'yes' or any other key for no:"
+            };
         }
     }
 }

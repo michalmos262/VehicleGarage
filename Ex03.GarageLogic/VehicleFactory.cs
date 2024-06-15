@@ -1,67 +1,52 @@
 ﻿
+using Ex03.GrarageLogic;
+
 namespace Ex03.GarageLogic
 {
-    internal class VehicleFactory
+    public static class VehicleFactory
     {
+        public static readonly string[] sr_VehicleTypeNames = { "Fuel car", "Electric Car", "Fuel Motorcycle", "Electric Motorcycle", "Truck" };
+
         public enum eVehicleType
         {
-            FuelCar,
+            FuelCar = 1,
             ElectricCar,
             FuelMotorcycle,
             ElectricMotorcycle,
             Truck
         }
 
-        public Vehicle MakeNewVehicle(eVehicleType i_VehicleType, string i_LisenceNumber)
+        public static Vehicle MakeNewVehicle(eVehicleType i_VehicleType, string i_LicenseNumber)
         {
             Vehicle newVehicle;
 
             switch (i_VehicleType)
             {
                 case eVehicleType.FuelCar:
+                    newVehicle = new Car(i_LicenseNumber);
+                    newVehicle.Engine = new FuelTank(newVehicle.MaxFuelAmount, newVehicle.FuelType);
+                    break;
                 case eVehicleType.ElectricCar:
-                    newVehicle = new Car(i_LisenceNumber);
+                    newVehicle = new Car(i_LicenseNumber);
+                    newVehicle.Engine = new Battery(newVehicle.MaxTimeBatteryCanLastInHours);
                     break;
                 case eVehicleType.FuelMotorcycle:
+                    newVehicle = new Motorcycle(i_LicenseNumber);
+                    newVehicle.Engine = new FuelTank(newVehicle.MaxFuelAmount, newVehicle.FuelType);
+                    break;
                 case eVehicleType.ElectricMotorcycle:
-                    newVehicle = new Motorcycle(i_LisenceNumber);
+                    newVehicle = new Motorcycle(i_LicenseNumber);
+                    newVehicle.Engine = new Battery(newVehicle.MaxTimeBatteryCanLastInHours);
                     break;
                 case eVehicleType.Truck:
-                    newVehicle = new Truck(i_LisenceNumber);
+                    newVehicle = new Truck(i_LicenseNumber);
+                    newVehicle.Engine = new FuelTank(newVehicle.MaxFuelAmount, newVehicle.FuelType);
                     break;
                 default:
-                    //TODO: throw exception
-                    newVehicle = null;
-                    break;
+                    throw new ValueOutOfRangeException(0, sr_VehicleTypeNames.Length);
             }
 
-            newVehicle.Engine = makeNewEnergyTank(newVehicle, i_VehicleType);
             return newVehicle;
-
-        }
-
-        private EnergyTank makeNewEnergyTank(Vehicle i_NewVehicle, eVehicleType i_VehicleType)
-        {
-            EnergyTank newEnergyTank;
-
-            switch (i_VehicleType)
-            {
-                case eVehicleType.FuelCar:
-                case eVehicleType.FuelMotorcycle:
-                case eVehicleType.Truck:
-                    newEnergyTank = new FuelTank(i_NewVehicle.MaxFuelAmount, i_NewVehicle.FuelType);
-                    break;
-                case eVehicleType.ElectricCar:
-                case eVehicleType.ElectricMotorcycle:
-                    newEnergyTank = new Battery(i_NewVehicle.MaxTimeBatteryCanLastInHours);
-                    break;
-                default:
-                    //TODO: throw exception
-                    newEnergyTank = null;
-                    break;
-            }
-
-            return newEnergyTank;
         }
     }
 }
