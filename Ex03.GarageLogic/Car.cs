@@ -15,6 +15,10 @@ namespace Ex03.GarageLogic
         private const FuelTank.eFuelType k_FuelType = FuelTank.eFuelType.Octan95;
         private const float k_MaxFuelAmount = 45f;
         private const float k_MaxBatteryTimeInHours = 3.5f;
+        private const short k_NumOfSpecificVehicleDetails = 2;
+        private const short k_NumOfDoorsDetailIndex = 0;
+        private const short k_ColorDetailIndex = 1;
+
 
         public enum eColor
         {
@@ -26,6 +30,7 @@ namespace Ex03.GarageLogic
 
         public Car(string i_LisenceNumber) : base(i_LisenceNumber)
         {
+            initSpecificVehicleDetailsRequirements();
         }
 
         public eColor Color
@@ -36,7 +41,13 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                m_Color = value;
+                if (Enum.IsDefined(typeof(eColor), value))
+                {
+                    m_Color = value;
+                }
+                {
+                    //TODO: throw exception
+                }
             }
         }
 
@@ -59,6 +70,58 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public override int MaxTireAirPressure
+        {
+            get
+            {
+                return k_MaxTireAirPressure;
+            }
+        }
+
+        public override int NumOfTires
+        {
+            get
+            {
+                return k_NumOfTires;
+            }
+        }
+
+        public override float MaxFuelAmount 
+        { 
+            get
+            {
+                return k_MaxFuelAmount;
+            }
+        }
+
+        public override float MaxTimeBatteryCanLastInHours 
+        { 
+            get
+            {
+                return k_MaxBatteryTimeInHours;
+            }
+        }
+
+        public override FuelTank.eFuelType FuelType
+        {
+            get
+            {
+                return k_FuelType;
+            }
+        }
+
+        private void initSpecificVehicleDetailsRequirements()
+        {
+            string numOfDoorsStr, colorStr;
+
+            m_SpecificVehicleDetailsRequirementsAsStrings = new List<string>(k_NumOfSpecificVehicleDetails);
+            numOfDoorsStr = string.Format("1. Number of doors. valid values: {0}-{1}", k_MinNumOfDoors, k_MaxNumOfDoors);
+            colorStr = string.Format("2. Color. valid values: {0}, {1}, {2}, {3}", eColor.Red, eColor.Yellow
+                , eColor.White, eColor.Black);
+            m_SpecificVehicleDetailsRequirementsAsStrings[k_NumOfDoorsDetailIndex] = numOfDoorsStr;
+            m_SpecificVehicleDetailsRequirementsAsStrings[k_ColorDetailIndex] = colorStr;
+        }
+
         protected override bool doesTireHasCorrectMaxPressure(Tire i_Tire)
         {
             return i_Tire.MaxAirPressure == k_MaxTireAirPressure;
@@ -67,6 +130,36 @@ namespace Ex03.GarageLogic
         protected override bool hasRequiredNumberOfTires(List<Tire> i_Tires)
         {
             return i_Tires.Count == k_NumOfTires;
+        }
+
+        public override void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_SpecificVehicleTypeDetailsStrings)
+        {
+            bool isNumOfDoorsStringIsNumber;
+            int numOfDoors;
+            eColor color;
+
+            if (i_SpecificVehicleTypeDetailsStrings == null || i_SpecificVehicleTypeDetailsStrings.Count != k_NumOfSpecificVehicleDetails)
+            {
+                //TODO: throw exception
+            }
+            isNumOfDoorsStringIsNumber = int.TryParse(i_SpecificVehicleTypeDetailsStrings[k_NumOfDoorsDetailIndex], out numOfDoors);
+            if (!isNumOfDoorsStringIsNumber)
+            {
+                //TODO: throw exception
+            }
+            else if (isNumOfDoorsStringIsNumber && (numOfDoors < k_MinNumOfDoors || k_MaxNumOfDoors < numOfDoors))
+            {
+                //TODO: throw exception
+            }
+            else if (!Enum.TryParse<eColor>(i_SpecificVehicleTypeDetailsStrings[k_ColorDetailIndex], out color))
+            {
+                //TODO: throw exception
+            }
+            else // All the details are valid
+            {
+                m_NumOfDoors = numOfDoors;
+                m_Color = color;
+            }
         }
     }
 }

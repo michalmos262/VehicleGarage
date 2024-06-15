@@ -23,7 +23,10 @@
                 {
                     m_CurrentEnergyAmount = value;
                 }
-                // TODO: add exception
+                else
+                {
+                    // TODO: add exception
+                }
             }
         }
 
@@ -34,5 +37,7 @@
                 return r_MaxEnergyAmount;
             }
         }
+
+        public abstract void ReEnegrize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null);
     }
 }
