@@ -118,7 +118,7 @@ namespace Ex03.GarageLogic
             return i_Tires.Count == k_NumOfTires;
         }
 
-        public override void setVehicleDetails(List<string> i_VehicleTypeDetails)
+        public override void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_VehicleTypeDetails)
         {
             eLicenseType licenseType;
             int engineVolume;
@@ -149,12 +149,12 @@ namespace Ex03.GarageLogic
         {
             return new List<string>()
             {
-                $@"Enter license type option:
+                $@"1. License type. Valid options:
 (1) {eLicenseType.A}
 (2) {eLicenseType.A1}
 (3) {eLicenseType.AA}
 (4) {eLicenseType.B1}",
-                "Enter the engine volume in CC:"
+                "2. Engine volume in CC"
             };
         }
     }

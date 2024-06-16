@@ -3,9 +3,9 @@ using Ex03.GrarageLogic;
 
 namespace Ex03.GarageLogic
 {
-    public static class VehicleFactory
+    public class VehicleFactory
     {
-        public static readonly string[] sr_VehicleTypeNames = { "Fuel car", "Electric Car", "Fuel Motorcycle", "Electric Motorcycle", "Truck" };
+        public readonly string[] sr_VehicleTypeNames = { "Fuel car", "Electric Car", "Fuel Motorcycle", "Electric Motorcycle", "Truck" };
 
         public enum eVehicleType
         {
@@ -16,7 +16,7 @@ namespace Ex03.GarageLogic
             Truck
         }
 
-        public static Vehicle MakeNewVehicle(eVehicleType i_VehicleType, string i_LicenseNumber)
+        public Vehicle MakeNewVehicle(eVehicleType i_VehicleType, string i_LicenseNumber)
         {
             Vehicle newVehicle;
 

@@ -124,7 +124,7 @@ namespace Ex03.GarageLogic
 
         protected abstract bool hasRequiredNumberOfTires(List<Tire> i_Tires);
 
-        public abstract void setVehicleDetails(List<string> i_VehicleTypeDetails);
+        public abstract void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_VehicleTypeDetails);
 
         public abstract Dictionary<string, string> GetSpecificVehicleTypeDetails();
 

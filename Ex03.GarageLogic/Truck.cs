@@ -13,9 +13,8 @@ namespace Ex03.GarageLogic
         private const eFuelType k_FuelType = eFuelType.Soler;
         private const float k_MaxFuelAmount = 120f;
         private const int k_PossibleMinCargoVolume = 0;
-        private const short k_NumOfSpecificVehicleDetails = 2;
-        private const short k_IsTransportingHazardousMaterialsIndex = 0;
-        private const short k_CargoVolumeIndex = 1;
+        private const short k_CargoVolumeIndex = 0;
+        private const short k_IsTransportingHazardousMaterialsIndex = 1;
 
         public Truck(string i_LicenseNumber) : base(i_LicenseNumber)
         {
@@ -103,7 +102,7 @@ namespace Ex03.GarageLogic
             return i_Tires.Count == k_NumOfTires;
         }
 
-        public override void setVehicleDetails(List<string> i_VehicleTypeDetails)
+        public override void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_VehicleTypeDetails)
         {
             float cargoVolume;
 
@@ -113,7 +112,7 @@ namespace Ex03.GarageLogic
             }
             else
             {
-                throw new FormatException("Cargo volume must be a positive number!");
+                throw new FormatException("Cargo volume must be a number!");
             }
             if (i_VehicleTypeDetails[k_IsTransportingHazardousMaterialsIndex] == "yes")
             {
@@ -139,8 +138,8 @@ namespace Ex03.GarageLogic
         {
             return new List<string>()
             {
-                $@"Enter the cargo volume:",
-                "Is the truck transporting hazardous materials? Enter 'yes' or any other key for no:"
+                $@"1. Cargo volume",
+                "2. Is the truck transporting hazardous materials? (possible value: 'yes', default value: 'no')"
             };
         }
     }

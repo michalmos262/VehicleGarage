@@ -11,6 +11,7 @@ namespace Ex03.ConsoleUI
     public class GarageManager
     {
         private Garage m_Garage = new Garage();
+        private VehicleFactory m_VehicleFactory = new VehicleFactory();
         private bool m_IsQuit = false;
 
         public enum eMenuOption
@@ -28,7 +29,7 @@ namespace Ex03.ConsoleUI
         {
             Console.WriteLine(
                 $@"
-Please enter an option number (any other key to exit):
+Please enter an option number (or any other key to exit):
 ------------------------------------------------------------------------
 ({(int)eMenuOption.InsertNewVehicle}) Add a new vehicle to the garage
 ({(int)eMenuOption.PrintLicenseNumbers}) Print the license numbers of the vehicles in the garage
@@ -42,18 +43,19 @@ Please enter an option number (any other key to exit):
         private void printVehicleTypes()
         {
             Console.WriteLine("Choose a vehicle type option:");
-            for (int i = 0; i < sr_VehicleTypeNames.Length; i++)
+            for (int i = 0; i < m_VehicleFactory.sr_VehicleTypeNames.Length; i++)
             {
-                Console.WriteLine("({0}) {1}", i + 1, sr_VehicleTypeNames[i]);
+                Console.WriteLine("({0}) {1}", i + 1, m_VehicleFactory.sr_VehicleTypeNames[i]);
             }
         }
 
-        private static void getVehicleTypeDetails(Vehicle io_vehicle)
+        private static void setVehicleTypeDetails(Vehicle io_vehicle)
         {
             List<string> vehicleDetails;
             List<string> userInputsList = new List<string>();
             string userInput;
 
+            Console.WriteLine("Please enter the details below:");
             vehicleDetails = io_vehicle.RequestAdditionalVehicleDetails();
             foreach (string vehicleDetail in vehicleDetails)
             {
@@ -62,7 +64,7 @@ Please enter an option number (any other key to exit):
                 userInputsList.Add(userInput);
             }
 
-            io_vehicle.setVehicleDetails(userInputsList);
+            io_vehicle.VerifyAndSetAllSpecificVehicleTypeDetails(userInputsList);
         }
 
         private int getMaxValueInEnum<T>()
@@ -70,7 +72,7 @@ Please enter an option number (any other key to exit):
             return Enum.GetValues(typeof(T)).Cast<int>().Max();
         }
 
-        private void getEnergyResourceDetails(EnergyTank io_Egnine)
+        private void setEnergyResourceDetails(EnergyTank io_Egnine)
         {
             bool isValidInput = false;
 
@@ -92,17 +94,11 @@ Please enter an option number (any other key to exit):
 
         private bool isSetAllTires()
         {
-            bool chosenOption = false;
-            string userInput;
-
             Console.WriteLine("Do you want to set all tires once? Enter 'yes' or any other key for no:");
-            userInput = Console.ReadLine();
-            if (userInput == "yes")
-            {
-                chosenOption = true;
-            }
+            string userInput = Console.ReadLine();
+            bool isUserChoseToSetAllTires = userInput == "yes";
 
-            return chosenOption;
+            return isUserChoseToSetAllTires;
         }
 
         private static void getTireDetails(Tire io_Tire)
@@ -114,7 +110,7 @@ Please enter an option number (any other key to exit):
             {
                 try
                 {
-                    Console.WriteLine("Enter the current Air Pressure:");
+                    Console.WriteLine("Enter the current air pressure:");
                     string userInput = Console.ReadLine();
                     io_Tire.CurrentAirPressure = TryParseFloat(userInput);
                     isValidInput = true;
@@ -126,7 +122,7 @@ Please enter an option number (any other key to exit):
             }
         }
 
-        private void getTiresDetails(List<Tire> io_Tires)
+        private void setTiresDetails(List<Tire> io_Tires)
         {
             int i = 1;
             bool isAllTiresTheSame = isSetAllTires();
@@ -155,34 +151,27 @@ Please enter an option number (any other key to exit):
             printVehicleTypes();
             string vehicleTypeChoice = Console.ReadLine();
             eVehicleType vehicleType = (eVehicleType)ParseEnumOption(vehicleTypeChoice, getMaxValueInEnum<eVehicleType>());
-            Vehicle vehicle = MakeNewVehicle(vehicleType, i_LicenseNumber);
+            Vehicle vehicle = m_VehicleFactory.MakeNewVehicle(vehicleType, i_LicenseNumber);
             Console.WriteLine("Enter model Name:");
             vehicle.ModelName = Console.ReadLine();
-            getVehicleTypeDetails(vehicle);
-            getEnergyResourceDetails(vehicle.Engine);
+            setVehicleTypeDetails(vehicle);
+            setEnergyResourceDetails(vehicle.Engine);
             vehicle.Tires = m_Garage.MakeNewTiresForVehicle(vehicle);
-            getTiresDetails(vehicle.Tires);
+            setTiresDetails(vehicle.Tires);
             return vehicle;
         }
 
         private void addNewVehicleToGarage(string i_LicenseNumber)
         {
-            try
-            {
-                string ownerName, ownerPhoneNumber;
-                Vehicle vehicle;
+            string ownerName, ownerPhoneNumber;
+            Vehicle vehicle;
 
-                Console.WriteLine("Enter owner Name:");
-                ownerName = Console.ReadLine();
-                Console.WriteLine("Enter owner phone number:");
-                ownerPhoneNumber = Console.ReadLine();
-                vehicle = getVehicleFromUser(i_LicenseNumber);
-                m_Garage.AddNewVehicleToGarage(vehicle, ownerName, ownerPhoneNumber);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
+            Console.WriteLine("Enter owner Name:");
+            ownerName = Console.ReadLine();
+            Console.WriteLine("Enter owner phone number:");
+            ownerPhoneNumber = Console.ReadLine();
+            vehicle = getVehicleFromUser(i_LicenseNumber);
+            m_Garage.AddNewVehicleToGarage(vehicle, ownerName, ownerPhoneNumber);
         }
 
         private string getLicenseNumberFromUser()
@@ -195,21 +184,28 @@ Please enter an option number (any other key to exit):
 
         private void insertNewVehicle()
         {
-            string licenseNumber = getLicenseNumberFromUser();
+            try
+            {
+                string licenseNumber = getLicenseNumberFromUser();
 
-            if (m_Garage.IsVehicleInGarage(licenseNumber))
-            {
-                Console.WriteLine($"Vehicle is already in the garage, moving its status to: {eVehicleStatus.InRepair}");
-                m_Garage.ChangeVehicleStatus(licenseNumber, eVehicleStatus.InRepair);
+                if (m_Garage.IsVehicleInGarage(licenseNumber))
+                {
+                    Console.WriteLine($"Vehicle is already in the garage, moving its status to: {eVehicleStatus.InRepair}");
+                    m_Garage.ChangeVehicleStatus(licenseNumber, eVehicleStatus.InRepair);
+                }
+                else
+                {
+                    addNewVehicleToGarage(licenseNumber);
+                    Console.WriteLine($"Vehicle was created successfully!");
+                }
             }
-            else
+            catch (Exception exception)
             {
-                addNewVehicleToGarage(licenseNumber);
-                Console.WriteLine($"Vehicle was created successfully!");
+                Console.WriteLine(exception.Message);
             }
         }
 
-        private void makeAction(eMenuOption i_MenuOption)
+        private void makeGarageAction(eMenuOption i_MenuOption)
         {
             switch (i_MenuOption)
             {
@@ -233,7 +229,7 @@ Please enter an option number (any other key to exit):
                     printMenu();
                     string userInput = Console.ReadLine();
                     eMenuOption chosenMenuOption = (eMenuOption)ParseEnumOption(userInput, getMaxValueInEnum<eMenuOption>());
-                    makeAction(chosenMenuOption);
+                    makeGarageAction(chosenMenuOption);
                 }
             }
             catch (Exception exception)

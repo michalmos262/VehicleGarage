@@ -121,7 +121,7 @@ namespace Ex03.GarageLogic
             return i_Tires.Count == k_NumOfTires;
         }
 
-        public override void setVehicleDetails(List<string> i_VehicleTypeDetails)
+        public override void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_VehicleTypeDetails)
         {
             int numOfDoors;
             eColor color;
@@ -154,8 +154,8 @@ namespace Ex03.GarageLogic
         {
             return new List<string>()
             {
-                $"Please enter number of doors ({k_MinNumOfDoors}-{k_MaxNumOfDoors}):",
-                $@"Enter a color option:
+                $"1. Number of doors. Valid values: {k_MinNumOfDoors}-{k_MaxNumOfDoors}",
+                $@"2. Color. valid values:
 (1) {eColor.Yellow}
 (2) {eColor.White}
 (3) {eColor.Red}

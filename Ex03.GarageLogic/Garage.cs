@@ -49,7 +49,6 @@ namespace Ex03.GarageLogic
             {
                 newTires.Add(new Tire(i_Vehicle.MaxTireAirPressure));
             }
-
             return newTires;
         }
 
@@ -64,12 +63,6 @@ namespace Ex03.GarageLogic
                 additionalAirPressureNeededForMaxPressure = tire.MaxAirPressure - tire.CurrentAirPressure;
                 tire.Inflate(additionalAirPressureNeededForMaxPressure);
             }
-        }
-
-        public void ChangeAllVehicleSpecificDetails(string i_LicenseNumber, List<string> i_AllSpecificVehicleTypeDetails)
-        {
-            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicle.setVehicleDetails(i_AllSpecificVehicleTypeDetails);
         }
 
         public void ReFuelVehicle(string i_LicenseNumber, FuelTank.eFuelType i_FuelType, float i_AdditionalFuelInLiters)
@@ -134,7 +127,7 @@ namespace Ex03.GarageLogic
             basicVehicleDetails = getBasicVehicleInfo(vehicle);
             allVehicleDetails = allVehicleDetails.Concat(basicVehicleDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
             specificVehicleDetails = vehicle.GetSpecificVehicleTypeDetails();
-            allVehicleDetails = allVehicleDetails.Concat(specificVehicleDetails).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            allVehicleDetails = allVehicleDetails.Concat(specificVehicleDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
 
             return allVehicleDetails;
         }
