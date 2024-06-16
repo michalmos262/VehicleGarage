@@ -319,7 +319,7 @@ Please enter an option number (or any other key to exit):
 
         private void makeGarageAction(eMenuOption i_MenuOption)
         {
-            switch (i_MenuOption)
+            switch (i_MenuOption) //TODO: continue menu
             {
                 case eMenuOption.InsertNewVehicle:
                     insertNewVehicle();
@@ -330,6 +330,7 @@ Please enter an option number (or any other key to exit):
                 case eMenuOption.ChangeVehicleStatus:
                     changeVehicleStatus();
                     break;
+                
                 default:
                     m_IsQuit = true;
                     break;
