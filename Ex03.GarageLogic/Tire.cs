@@ -12,6 +12,7 @@ namespace Ex03.GarageLogic
         public Tire(float i_MaxAirPressureByManufacturer)
         {
             r_MaxAirPressureByManufacturer = i_MaxAirPressureByManufacturer;
+            m_CurrentAirPressure = 0;
         }
 
         public string ManufacturerName

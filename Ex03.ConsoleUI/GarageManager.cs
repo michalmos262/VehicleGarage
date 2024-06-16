@@ -5,6 +5,7 @@ using static Ex03.GarageLogic.VehicleFactory;
 using System.Collections.Generic;
 using static Ex03.ConsoleUI.InputValidator;
 using System.Linq;
+using static Ex03.GarageLogic.FuelTank;
 
 namespace Ex03.ConsoleUI
 {
@@ -207,7 +208,7 @@ Please enter an option number (or any other key to exit):
             }
         }
 
-        private static void printEnum(System.Type i_TypeOfEnum, int i_EnumSize)
+        private static void printEnum(Type i_TypeOfEnum, int i_EnumSize)
         {
             string enumKey;
             for (int i = 1; i <= i_EnumSize; i++)
@@ -281,8 +282,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                eVehicleStatus previousVehicleStatus =
-                    m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).VehicleStatus;
+                eVehicleStatus previousVehicleStatus = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).VehicleStatus;
                 Console.WriteLine("To which status to move?");
                 int maxValueInEnum = getMaxValueInEnum<eVehicleStatus>();
                 printEnum(typeof(eVehicleStatus), maxValueInEnum);
@@ -291,8 +291,7 @@ Please enter an option number (or any other key to exit):
                 {
                     eVehicleStatus newVehicleStatus = (eVehicleStatus)ParseEnumOption(userInput, maxValueInEnum);
                     m_Garage.ChangeVehicleStatus(licenseNumber, newVehicleStatus);
-                    Console.WriteLine(
-                        $"Vehicle status was changed from {previousVehicleStatus} to {newVehicleStatus}!");
+                    Console.WriteLine($"Vehicle status was changed from {previousVehicleStatus} to {newVehicleStatus}!");
                 }
                 catch (Exception exception)
                 {
@@ -305,21 +304,74 @@ Please enter an option number (or any other key to exit):
             }
         }
 
-        private void setSomeVehicles() //TODO: DELETE THIS FUNCTION, was made for debug
+        private void inflateTiresToMax()
         {
-            Vehicle v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "123");
-            m_Garage.AddNewVehicleToGarage(v, "mic1", "123");
+            string licenseNumber = getLicenseNumberFromUser();
 
-            v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "4");
-            m_Garage.AddNewVehicleToGarage(v, "mic2", "456");
+            try
+            {
+                m_Garage.InflateVehicleTiresToMaximumByLicenseNumber(licenseNumber);
+                Console.WriteLine("Inflation of the vehicle tires to maximum air pressure succeeded!");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
 
-            v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "1");
-            m_Garage.AddNewVehicleToGarage(v, "mic3", "789");
+        private void refuelVehicle()
+        {
+            string licenseNumber = getLicenseNumberFromUser();
+
+            try
+            {
+                Console.WriteLine("Enter the amount of fuel to add to the vehicle:");
+                string fuelAmountInput = Console.ReadLine();
+                float fuelToAdd = TryParseFloat(fuelAmountInput);
+                Console.WriteLine("Enter a fuel type option:");
+                int maxValueInEnum = getMaxValueInEnum<eFuelType>();
+                printEnum(typeof(eFuelType), maxValueInEnum);
+                string optionChoiceInput = Console.ReadLine();
+                eFuelType fuelType = (eFuelType)ParseEnumOption(optionChoiceInput, maxValueInEnum);
+                m_Garage.ReFuelVehicle(licenseNumber, fuelType, fuelToAdd);
+                Console.WriteLine("Refueling succeeded!");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+
+        private void chargeVehicle()
+        {
+            string licenseNumber = getLicenseNumberFromUser();
+
+            try
+            {
+                Console.WriteLine("Enter the additional time amount for charging (in minutes):");
+                string timeAmountInMinutesInput = Console.ReadLine();
+
+                try
+                {
+                    float timeAmountInMinutes = TryParseFloat(timeAmountInMinutesInput);
+                    float timeAmountInHours = timeAmountInMinutes / 60;
+                    m_Garage.ReChargeVehicle(licenseNumber, timeAmountInHours);
+                    Console.WriteLine("Charging succeeded!");
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
         }
 
         private void makeGarageAction(eMenuOption i_MenuOption)
         {
-            switch (i_MenuOption) //TODO: continue menu
+            switch (i_MenuOption)
             {
                 case eMenuOption.InsertNewVehicle:
                     insertNewVehicle();
@@ -330,7 +382,18 @@ Please enter an option number (or any other key to exit):
                 case eMenuOption.ChangeVehicleStatus:
                     changeVehicleStatus();
                     break;
-                
+                case eMenuOption.InflateTiresToMax:
+                    inflateTiresToMax();
+                    break;
+                case eMenuOption.RefuelVehicle:
+                    refuelVehicle();
+                    break;
+                case eMenuOption.ChargeVehicle:
+                    chargeVehicle();
+                    break;
+                case eMenuOption.ShowVehicleInformation:
+                    //TODO: show vehicle information option
+                    break;
                 default:
                     m_IsQuit = true;
                     break;
@@ -356,6 +419,20 @@ Please enter an option number (or any other key to exit):
                 Console.WriteLine(exception.Message);
                 Console.WriteLine("Goodbye!");
             }
+        }
+        private void setSomeVehicles() //TODO: DELETE THIS FUNCTION, was made for debug
+        {
+            Vehicle v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "123");
+            v.Tires = m_Garage.MakeNewTiresForVehicle(v);
+            m_Garage.AddNewVehicleToGarage(v, "mic1", "123");
+
+            v = m_VehicleFactory.MakeNewVehicle((eVehicleType.ElectricCar), "4");
+            v.Tires = m_Garage.MakeNewTiresForVehicle(v);
+            m_Garage.AddNewVehicleToGarage(v, "mic2", "456");
+
+            v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "1");
+            v.Tires = m_Garage.MakeNewTiresForVehicle(v);
+            m_Garage.AddNewVehicleToGarage(v, "mic3", "789");
         }
     }
 }

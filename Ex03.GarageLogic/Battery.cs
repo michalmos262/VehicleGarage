@@ -15,7 +15,7 @@ namespace Ex03.GarageLogic
         {
             if (i_FuelType.HasValue)
             {
-                throw new ArgumentException(string.Format("Can't add fuel to a vehicle uses battery"));
+                throw new ArgumentException(string.Format("Can't refuel a vehicle uses battery!"));
             }
             CurrentEnergyAmount += i_AdditionalEnergyAmount;
         }

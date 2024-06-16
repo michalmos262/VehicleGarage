@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
 
         public enum eFuelType
         {
-            Octan95,
+            Octan95 = 1,
             Octan96,
             Octan98,
             Soler
@@ -31,16 +31,13 @@ namespace Ex03.GarageLogic
         {
             if (!i_FuelType.HasValue)
             {
-                throw new ArgumentNullException(nameof(i_FuelType));
+                throw new ArgumentException(string.Format("Can't charge a vehicle uses fuel!"));
             }
-            else if (i_FuelType != r_FuelType)
+            if (i_FuelType != r_FuelType)
             {
                 throw new ArgumentException("Invalid fuel type!");
             }
-            else
-            {
-                CurrentEnergyAmount += i_AdditionalEnergyAmount;
-            }
+            CurrentEnergyAmount += i_AdditionalEnergyAmount;
         }
 
         public override Dictionary<string, string> GetSpecificEnergyTypeDetails()
