@@ -13,7 +13,7 @@ namespace Ex03.GarageLogic
             m_VehicleRecords[i_Vehicle.LicenseNumber] = new VehicleRecordInGarage(i_Vehicle, i_OwnerName, i_OwnerPhoneNumber);
         }
 
-        private VehicleRecordInGarage getVehicleRecordByLicenseNumber(string i_LicenseNumber)
+        public VehicleRecordInGarage GetVehicleRecordByLicenseNumber(string i_LicenseNumber)
         {
             VehicleRecordInGarage requestedVehicleRecord = null;
 
@@ -23,10 +23,15 @@ namespace Ex03.GarageLogic
             }
             else
             {
-                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist");
+                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist!");
             }
             
             return requestedVehicleRecord;
+        }
+
+        public bool IsGarageEmpty()
+        {
+            return m_VehicleRecords.Count == 0;
         }
 
         public bool IsVehicleInGarage(string i_LicenseNumber)
@@ -36,7 +41,7 @@ namespace Ex03.GarageLogic
 
         private Vehicle getVehicleByLicenseNumber(string i_LicenseNumber)
         {
-            VehicleRecordInGarage requestedVehicleRecord = getVehicleRecordByLicenseNumber(i_LicenseNumber);
+            VehicleRecordInGarage requestedVehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
 
             return requestedVehicleRecord != null ? requestedVehicleRecord.Vehicle : null;
         }
@@ -79,7 +84,7 @@ namespace Ex03.GarageLogic
 
         public void ChangeVehicleStatus(string i_LicenseNumber, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
         {
-            VehicleRecordInGarage vehicleRecord = getVehicleRecordByLicenseNumber(i_LicenseNumber);
+            VehicleRecordInGarage vehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
             vehicleRecord.VehicleStatus = i_NewVehicleStatus;
         }
 
@@ -121,7 +126,7 @@ namespace Ex03.GarageLogic
             Dictionary<string, string> allVehicleDetails = new Dictionary<string, string>(), basicVehicleDetails, specificVehicleDetails;
 
             vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicleRecord = getVehicleRecordByLicenseNumber(i_LicenseNumber);
+            vehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
             allVehicleDetails.Add("owner name", string.IsNullOrEmpty(vehicleRecord.OwnerName) ? "" : vehicleRecord.OwnerName);
             allVehicleDetails.Add("status", vehicleRecord.VehicleStatus.ToString());
             basicVehicleDetails = getBasicVehicleInfo(vehicle);

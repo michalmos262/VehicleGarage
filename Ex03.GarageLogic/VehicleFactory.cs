@@ -5,8 +5,15 @@ namespace Ex03.GarageLogic
 {
     public class VehicleFactory
     {
-        public readonly string[] sr_VehicleTypeNames = { "Fuel car", "Electric Car", "Fuel Motorcycle", "Electric Motorcycle", "Truck" };
+        private readonly string[] r_VehicleTypeNames = { "Fuel car", "Electric Car", "Fuel Motorcycle", "Electric Motorcycle", "Truck" };
 
+        public string[] VehicleTypeNames
+        {
+            get
+            {
+                return r_VehicleTypeNames;
+            }
+        }
         public enum eVehicleType
         {
             FuelCar = 1,
@@ -43,7 +50,7 @@ namespace Ex03.GarageLogic
                     newVehicle.Engine = new FuelTank(newVehicle.MaxFuelAmount, newVehicle.FuelType);
                     break;
                 default:
-                    throw new ValueOutOfRangeException(0, sr_VehicleTypeNames.Length);
+                    throw new ValueOutOfRangeException(0, r_VehicleTypeNames.Length);
             }
 
             return newVehicle;

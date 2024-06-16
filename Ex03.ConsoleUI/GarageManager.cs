@@ -17,12 +17,12 @@ namespace Ex03.ConsoleUI
         public enum eMenuOption
         {
             InsertNewVehicle = 1,
-            PrintLicenseNumbers,
+            ShowLicenseNumbers,
             ChangeVehicleStatus,
             InflateTiresToMax,
             RefuelVehicle,
             ChargeVehicle,
-            PrintVehicleInformation
+            ShowVehicleInformation
         }
 
         private static void printMenu()
@@ -30,22 +30,22 @@ namespace Ex03.ConsoleUI
             Console.WriteLine(
                 $@"
 Please enter an option number (or any other key to exit):
-------------------------------------------------------------------------
+----------------------------------------------------------
 ({(int)eMenuOption.InsertNewVehicle}) Add a new vehicle to the garage
-({(int)eMenuOption.PrintLicenseNumbers}) Print the license numbers of the vehicles in the garage
+({(int)eMenuOption.ShowLicenseNumbers}) Show the license numbers of the vehicles in the garage
 ({(int)eMenuOption.ChangeVehicleStatus}) Change a vehicle status
 ({(int)eMenuOption.InflateTiresToMax}) Inflate a vehicle tires to maximum
 ({(int)eMenuOption.RefuelVehicle}) Refuel a vehicle (for fuel vehicles only)
 ({(int)eMenuOption.ChargeVehicle}) Charge a vehicle (for battery vehicles only)
-({(int)eMenuOption.PrintVehicleInformation}) Print a vehicle information");
+({(int)eMenuOption.ShowVehicleInformation}) Show a vehicle information");
         }
 
         private void printVehicleTypes()
         {
             Console.WriteLine("Choose a vehicle type option:");
-            for (int i = 0; i < m_VehicleFactory.sr_VehicleTypeNames.Length; i++)
+            for (int i = 0; i < m_VehicleFactory.VehicleTypeNames.Length; i++)
             {
-                Console.WriteLine("({0}) {1}", i + 1, m_VehicleFactory.sr_VehicleTypeNames[i]);
+                Console.WriteLine("({0}) {1}", i + 1, m_VehicleFactory.VehicleTypeNames[i]);
             }
         }
 
@@ -150,7 +150,8 @@ Please enter an option number (or any other key to exit):
         {
             printVehicleTypes();
             string vehicleTypeChoice = Console.ReadLine();
-            eVehicleType vehicleType = (eVehicleType)ParseEnumOption(vehicleTypeChoice, getMaxValueInEnum<eVehicleType>());
+            eVehicleType vehicleType =
+                (eVehicleType)ParseEnumOption(vehicleTypeChoice, getMaxValueInEnum<eVehicleType>());
             Vehicle vehicle = m_VehicleFactory.MakeNewVehicle(vehicleType, i_LicenseNumber);
             Console.WriteLine("Enter model Name:");
             vehicle.ModelName = Console.ReadLine();
@@ -161,7 +162,7 @@ Please enter an option number (or any other key to exit):
             return vehicle;
         }
 
-        private void addNewVehicleToGarage(string i_LicenseNumber)
+        private void getNewVehicleFromUserAndAddToGarage(string i_LicenseNumber)
         {
             string ownerName, ownerPhoneNumber;
             Vehicle vehicle;
@@ -190,12 +191,13 @@ Please enter an option number (or any other key to exit):
 
                 if (m_Garage.IsVehicleInGarage(licenseNumber))
                 {
-                    Console.WriteLine($"Vehicle is already in the garage, moving its status to: {eVehicleStatus.InRepair}");
+                    Console.WriteLine(
+                        $"Vehicle is already in the garage, moving its status to: {eVehicleStatus.InRepair}");
                     m_Garage.ChangeVehicleStatus(licenseNumber, eVehicleStatus.InRepair);
                 }
                 else
                 {
-                    addNewVehicleToGarage(licenseNumber);
+                    getNewVehicleFromUserAndAddToGarage(licenseNumber);
                     Console.WriteLine($"Vehicle was created successfully!");
                 }
             }
@@ -205,6 +207,116 @@ Please enter an option number (or any other key to exit):
             }
         }
 
+        private static void printEnum(System.Type i_TypeOfEnum, int i_EnumSize)
+        {
+            string enumKey;
+            for (int i = 1; i <= i_EnumSize; i++)
+            {
+                enumKey = Enum.GetName(i_TypeOfEnum, i);
+                Console.WriteLine("({0}) {1}", i, enumKey);
+            }
+
+        }
+
+        private eVehicleStatus getVehicleStatus()
+        {
+            Console.WriteLine("Choose a vehicle status ");
+            int maxValueInEnum = getMaxValueInEnum<eVehicleStatus>();
+            printEnum(typeof(eVehicleStatus), maxValueInEnum);
+            string userInput = Console.ReadLine();
+            eVehicleStatus statusChoice = (eVehicleStatus)ParseEnumOption(userInput, maxValueInEnum);
+            return statusChoice;
+        }
+
+        private void printLicenseNumbers(List<string> i_LicenseNumbers)
+        {
+            if (i_LicenseNumbers == null)
+            {
+                Console.WriteLine("No license numbers to show!");
+            }
+            else
+            {
+                Console.WriteLine("The license numbers:");
+                int i = 1;
+                foreach (string licenseNumber in i_LicenseNumbers)
+                {
+                    Console.WriteLine($"{i}. {licenseNumber}");
+                    i++;
+                }
+            }
+        }
+
+        private void showLicenseNumbers()
+        {
+            List<string> licenseNumbers;
+            bool isEmptyGarage = m_Garage.IsGarageEmpty();
+
+            if (isEmptyGarage)
+            {
+                Console.WriteLine("Garage is empty! No license numbers to show");
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Do you want to see license numbers of a specific vehicle status? Enter 'yes' or press any key for no");
+                string userInput = Console.ReadLine();
+                bool isFilteredByStatus = userInput == "yes";
+                if (isFilteredByStatus)
+                {
+                    eVehicleStatus statusChoice = getVehicleStatus();
+                    licenseNumbers = m_Garage.GetLicenseNumbersList(statusChoice);
+                }
+                else
+                {
+                    licenseNumbers = m_Garage.GetLicenseNumbersList();
+                }
+
+                printLicenseNumbers(licenseNumbers);
+            }
+        }
+
+        private void changeVehicleStatus()
+        {
+            string licenseNumber = getLicenseNumberFromUser();
+
+            try
+            {
+                eVehicleStatus previousVehicleStatus =
+                    m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).VehicleStatus;
+                Console.WriteLine("To which status to move?");
+                int maxValueInEnum = getMaxValueInEnum<eVehicleStatus>();
+                printEnum(typeof(eVehicleStatus), maxValueInEnum);
+                string userInput = Console.ReadLine();
+                try
+                {
+                    eVehicleStatus newVehicleStatus = (eVehicleStatus)ParseEnumOption(userInput, maxValueInEnum);
+                    m_Garage.ChangeVehicleStatus(licenseNumber, newVehicleStatus);
+                    Console.WriteLine(
+                        $"Vehicle status was changed from {previousVehicleStatus} to {newVehicleStatus}!");
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+
+        private void setSomeVehicles() //TODO: DELETE THIS FUNCTION, was made for debug
+        {
+            Vehicle v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "123");
+            m_Garage.AddNewVehicleToGarage(v, "mic1", "123");
+
+            v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "4");
+            m_Garage.AddNewVehicleToGarage(v, "mic2", "456");
+
+            v = m_VehicleFactory.MakeNewVehicle((eVehicleType.FuelCar), "1");
+            m_Garage.AddNewVehicleToGarage(v, "mic3", "789");
+        }
+
         private void makeGarageAction(eMenuOption i_MenuOption)
         {
             switch (i_MenuOption)
@@ -212,7 +324,12 @@ Please enter an option number (or any other key to exit):
                 case eMenuOption.InsertNewVehicle:
                     insertNewVehicle();
                     break;
-                // TODO: continue menu
+                case eMenuOption.ShowLicenseNumbers:
+                    showLicenseNumbers();
+                    break;
+                case eMenuOption.ChangeVehicleStatus:
+                    changeVehicleStatus();
+                    break;
                 default:
                     m_IsQuit = true;
                     break;
@@ -221,6 +338,7 @@ Please enter an option number (or any other key to exit):
 
         public void StartConsoleInteraction()
         {
+            setSomeVehicles();
             Console.WriteLine("Welcome to the garage!");
             try
             {
