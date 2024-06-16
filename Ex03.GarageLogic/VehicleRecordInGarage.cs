@@ -1,20 +1,14 @@
 ﻿using System;
+using System.Linq;
 
 namespace Ex03.GarageLogic
 {
-    internal class VehicleRecordInGarage
+    public class VehicleRecordInGarage
     {
         private Vehicle m_Vehicle;
-        private readonly string m_OwnerName;
-        private readonly string m_OwnerPhoneNumber;
+        private string m_OwnerName;
+        private string m_OwnerPhoneNumber;
         private eVehicleStatus m_VehicleStatus;
-
-        public enum eVehicleStatus
-        {
-            InRepair,
-            Repaired,
-            Paid
-        }
 
         public VehicleRecordInGarage(Vehicle i_Vehicle, string i_OwnerName, string i_OwnerPhoneNumber)
         {
@@ -22,6 +16,13 @@ namespace Ex03.GarageLogic
             m_OwnerName = i_OwnerName;
             m_OwnerPhoneNumber = i_OwnerPhoneNumber;
             m_VehicleStatus = eVehicleStatus.InRepair;
+        }
+
+        public enum eVehicleStatus
+        {
+            InRepair = 1,
+            Repaired,
+            Paid
         }
 
         public Vehicle Vehicle
@@ -32,11 +33,11 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public string LisenceNumber
+        public string OwnerName
         {
             get
             {
-                return m_Vehicle.LisenceNumber;
+                return m_OwnerName;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -8,7 +9,7 @@ namespace Ex03.GarageLogic
 
         public enum eFuelType
         {
-            Octan95,
+            Octan95 = 1,
             Octan96,
             Octan98,
             Soler
@@ -20,23 +21,33 @@ namespace Ex03.GarageLogic
             {
                 r_FuelType = i_FuelType;
             }
-            // TODO: excpetion ???
+            else
+            {
+                throw new ArgumentException("Fuel type is not correct!");
+            }
         }
 
-        public override void ReEnegrize(float i_AdditionalEnergeyAmount, FuelTank.eFuelType? i_FuelType = null)
+        public override void ReEnergize(float i_AdditionalEnergyAmount, FuelTank.eFuelType? i_FuelType = null)
         {
             if (!i_FuelType.HasValue)
             {
-                throw new ArgumentNullException(nameof(i_FuelType));
+                throw new ArgumentException(string.Format("Can't charge a vehicle uses fuel!"));
             }
-            else if (i_FuelType != r_FuelType)
+            if (i_FuelType != r_FuelType)
             {
-                // TODO: execption
+                throw new ArgumentException("Invalid fuel type!");
             }
-            else
-            {
-                CurrentEnergyAmount += i_AdditionalEnergeyAmount;
-            }
+            CurrentEnergyAmount += i_AdditionalEnergyAmount;
+        }
+
+        public override Dictionary<string, string> GetSpecificEnergyTypeDetails()
+        {
+            Dictionary<string, string> details = new Dictionary<string, string>();
+
+            details.Add("Energy type", r_FuelType.ToString());
+            details.Add("Liters left in tank", m_CurrentEnergyAmount.ToString());
+
+            return details;
         }
     }
 }

@@ -6,29 +6,34 @@ namespace Ex03.GarageLogic
     public abstract class Vehicle
     {
         protected string m_ModelName;
-        protected string m_LisenceNumber;
+        protected string m_LicenseNumber;
         protected List<Tire> m_Tires;
         protected EnergyTank m_Engine;
         protected List<string> m_SpecificVehicleDetailsRequirementsAsStrings;
+        protected const float k_MinEngineVolume = 0;
 
-        protected Vehicle(string i_LisenceNumber)
+        protected Vehicle(string i_LicenseNumber)
         {
-            m_LisenceNumber = i_LisenceNumber;
+            m_LicenseNumber = i_LicenseNumber;
         }
 
-        public string ManufactureName
+        public string ModelName
         {
             get
             {
                 return m_ModelName;
             }
+            set
+            {
+                m_ModelName = value;
+            }
         }
 
-        public string LisenceNumber
+        public string LicenseNumber
         {
             get
             {
-                return m_LisenceNumber;
+                return m_LicenseNumber;
             }
         }
 
@@ -61,14 +66,13 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                if (hasRequiredNumberOfTires(value) is false)
+                if (!hasRequiredNumberOfTires(value))
                 {
-
-                    //TODO: throw exception
+                    throw new ArgumentException(string.Format("Invalid tires list length!"));
                 }
-                else if (areAllNewTiresAtCorrectMaxPressure(value) is false)
+                if (!areAllNewTiresAtCorrectMaxPressure(value))
                 {
-                    //TODO: throw exception
+                    throw new ArgumentException(string.Format("Not all tires have the right max air pressure!"));
                 }
                 else
                 {
@@ -83,21 +87,6 @@ namespace Ex03.GarageLogic
             {
                 return m_SpecificVehicleDetailsRequirementsAsStrings;
             }
-        }
-
-        public abstract int MaxTireAirPressure { get; }
-
-        public abstract int NumOfTires { get; }
-
-        public abstract float MaxFuelAmount { get; }
-
-        public abstract float MaxTimeBatteryCanLastInHours { get; }
-
-        public abstract FuelTank.eFuelType FuelType{ get; }
-
-        public override int GetHashCode()
-        {
-            return m_LisenceNumber.GetHashCode();
         }
 
         private bool areAllNewTiresAtCorrectMaxPressure(List<Tire> i_NewTires)
@@ -116,10 +105,29 @@ namespace Ex03.GarageLogic
             return isTiresAtCorrectMaxPressure;
         }
 
+        public override int GetHashCode()
+        {
+            return m_LicenseNumber.GetHashCode();
+        }
+
+        public abstract float MaxTireAirPressure { get; }
+
+        public abstract int NumOfTires { get; }
+
+        public abstract float MaxFuelAmount { get; }
+
+        public abstract float MaxTimeBatteryCanLastInHours { get; }
+
+        public abstract FuelTank.eFuelType FuelType{ get; }
+
         protected abstract bool doesTireHasCorrectMaxPressure(Tire i_Tire);
 
         protected abstract bool hasRequiredNumberOfTires(List<Tire> i_Tires);
 
-        public abstract void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_SpecificVehicleTypeDetailsStrings);
+        public abstract void VerifyAndSetAllSpecificVehicleTypeDetails(List<string> i_VehicleTypeDetails);
+
+        public abstract Dictionary<string, string> GetSpecificVehicleTypeDetails();
+
+        public abstract List<string> RequestAdditionalVehicleDetails();
     }
 }
