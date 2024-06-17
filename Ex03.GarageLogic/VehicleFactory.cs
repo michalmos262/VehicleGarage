@@ -14,6 +14,7 @@ namespace Ex03.GarageLogic
                 return r_VehicleTypeNames;
             }
         }
+
         public enum eVehicleType
         {
             FuelCar = 1,

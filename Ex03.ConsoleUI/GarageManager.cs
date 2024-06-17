@@ -167,13 +167,27 @@ Please enter an option number (or any other key to exit):
         {
             string ownerName, ownerPhoneNumber;
             Vehicle vehicle;
+            bool isAllSet = false;
 
-            Console.WriteLine("Enter owner Name:");
-            ownerName = Console.ReadLine();
-            Console.WriteLine("Enter owner phone number:");
-            ownerPhoneNumber = Console.ReadLine();
-            vehicle = getVehicleFromUser(i_LicenseNumber);
-            m_Garage.AddNewVehicleToGarage(vehicle, ownerName, ownerPhoneNumber);
+            while (!isAllSet)
+            {
+                try
+                {
+                    vehicle = getVehicleFromUser(i_LicenseNumber);
+                    Console.WriteLine("Thank you for the vehicle details, please enter the owner name:");
+                    ownerName = Console.ReadLine();
+                    Console.WriteLine("Enter the owner phone number:");
+                    ownerPhoneNumber = Console.ReadLine();
+                    m_Garage.AddNewVehicleToGarage(vehicle, ownerName, ownerPhoneNumber);
+                    
+                    isAllSet = true;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                    Console.WriteLine("Please enter all the vehicle details again:\n");
+                }
+            }
         }
 
         private string getLicenseNumberFromUser()
@@ -199,7 +213,7 @@ Please enter an option number (or any other key to exit):
                 else
                 {
                     getNewVehicleFromUserAndAddToGarage(licenseNumber);
-                    Console.WriteLine($"Vehicle was created successfully!");
+                    Console.WriteLine($"Vehicle was added successfully to the garage!");
                 }
             }
             catch (Exception exception)
@@ -401,7 +415,7 @@ Please enter an option number (or any other key to exit):
         }
 
         public void StartConsoleInteraction()
-        {
+        { 
             setSomeVehicles();
             Console.WriteLine("Welcome to the garage!");
             try
