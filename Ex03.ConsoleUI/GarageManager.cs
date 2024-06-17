@@ -52,16 +52,15 @@ Please enter an option number (or any other key to exit):
 
         private static void setVehicleTypeDetails(Vehicle io_vehicle)
         {
+            List<string> vehicleDetails;
+            List<string> userInputsList = new List<string>();
+            string userInput;
             bool isVehicleSet = false;
 
             while (!isVehicleSet)
             {
                 try
                 {
-                    List<string> vehicleDetails;
-                    List<string> userInputsList = new List<string>();
-                    string userInput;
-
                     Console.WriteLine("Please enter the details below:");
                     vehicleDetails = io_vehicle.RequestAdditionalVehicleDetails();
                     foreach (string vehicleDetail in vehicleDetails)
