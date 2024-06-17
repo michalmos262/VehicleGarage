@@ -129,6 +129,7 @@ namespace Ex03.GarageLogic
             vehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
             allVehicleDetails.Add("owner name", string.IsNullOrEmpty(vehicleRecord.OwnerName) ? "" : vehicleRecord.OwnerName);
             allVehicleDetails.Add("status", vehicleRecord.VehicleStatus.ToString());
+            allVehicleDetails.Add("Owner phone number", string.IsNullOrEmpty(vehicleRecord.OwnerPhoneNumber) ? "" : vehicleRecord.OwnerPhoneNumber);
             basicVehicleDetails = getBasicVehicleInfo(vehicle);
             allVehicleDetails = allVehicleDetails.Concat(basicVehicleDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
             specificVehicleDetails = vehicle.GetSpecificVehicleTypeDetails();
@@ -150,7 +151,7 @@ namespace Ex03.GarageLogic
                 basicVehicleDetails.Add("Tires manufacturer", i_Vehicle.Tires[0].ManufacturerName);
                 for (int i = 0; i < i_Vehicle.Tires.Count; i++)
                 {
-                    basicVehicleDetails.Add($"Air pressure in tire number {i + 1}", i_Vehicle.Tires[i].CurrentAirPressure.ToString());
+                    basicVehicleDetails.Add($"Air pressure in tire #{i + 1}", i_Vehicle.Tires[i].CurrentAirPressure.ToString());
                 }
             }
 

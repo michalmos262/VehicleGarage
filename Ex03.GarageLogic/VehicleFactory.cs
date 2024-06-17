@@ -1,5 +1,4 @@
-﻿
-using Ex03.GrarageLogic;
+﻿using Ex03.GrarageLogic;
 
 namespace Ex03.GarageLogic
 {

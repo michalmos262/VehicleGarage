@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ex03.GrarageLogic;
-using static Ex03.GarageLogic.Car;
 using static Ex03.GarageLogic.FuelTank;
 
 namespace Ex03.GarageLogic
@@ -22,7 +21,7 @@ namespace Ex03.GarageLogic
 
         public enum eColor
         {
-            Yellow,
+            Yellow = 1,
             White,
             Red,
             Black
@@ -103,7 +102,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override FuelTank.eFuelType FuelType
+        public override eFuelType FuelType
         {
             get
             {
@@ -134,7 +133,7 @@ namespace Ex03.GarageLogic
             {
                 throw new FormatException("Number of doors should be a number!");
             }
-            if (!Enum.TryParse<eColor>(i_VehicleTypeDetails[k_ColorDetailIndex], out color))
+            if (Enum.TryParse(i_VehicleTypeDetails[k_ColorDetailIndex], out color))
             {
                 Color = color;
             }
@@ -142,12 +141,11 @@ namespace Ex03.GarageLogic
 
         public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
         {
-            Dictionary<string, string> specificCarDetails = new Dictionary<string, string>();
-
-            specificCarDetails.Add("Number of doors", m_NumOfDoors.ToString());
-            specificCarDetails.Add("Color", m_Color.ToString());
-
-            return specificCarDetails;
+            return new Dictionary<string, string>
+            {
+                { "Number of doors", m_NumOfDoors.ToString() },
+                { "Color", Color.ToString() }
+            };
         }
 
         public override List<string> RequestAdditionalVehicleDetails()

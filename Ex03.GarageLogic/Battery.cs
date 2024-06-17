@@ -1,5 +1,4 @@
-﻿using Ex03.GrarageLogic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
@@ -15,17 +14,18 @@ namespace Ex03.GarageLogic
         {
             if (i_FuelType.HasValue)
             {
-                throw new ArgumentException(string.Format("Can't refuel a vehicle uses battery!"));
+                throw new ArgumentException("Can't refuel a vehicle uses battery!");
             }
             CurrentEnergyAmount += i_AdditionalEnergyAmount;
         }
 
         public override Dictionary<string, string> GetSpecificEnergyTypeDetails()
         {
-            Dictionary<string, string> details = new Dictionary<string, string>();
-
-            details.Add("Energy type", "Electricity");
-            details.Add("Hours left in battery", m_CurrentEnergyAmount.ToString());
+            Dictionary<string, string> details = new Dictionary<string, string>
+            {
+                { "Energy type", "Electricity" },
+                { "Hours left in battery", m_CurrentEnergyAmount.ToString() }
+            };
 
             return details;
         }

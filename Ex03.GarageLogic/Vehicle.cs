@@ -9,7 +9,6 @@ namespace Ex03.GarageLogic
         protected string m_LicenseNumber;
         protected List<Tire> m_Tires;
         protected EnergyTank m_Engine;
-        protected List<string> m_SpecificVehicleDetailsRequirementsAsStrings;
         protected const float k_MinEngineVolume = 0;
 
         protected Vehicle(string i_LicenseNumber)
@@ -34,14 +33,6 @@ namespace Ex03.GarageLogic
             get
             {
                 return m_LicenseNumber;
-            }
-        }
-
-        public float EnergyPercentageLeft
-        {
-            get
-            {
-                return m_Engine.CurrentEnergyAmount;
             }
         }
 
@@ -81,14 +72,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public List<string> SpecificVehicleDetailsRequirementsAsStrings
-        {
-            get
-            {
-                return m_SpecificVehicleDetailsRequirementsAsStrings;
-            }
-        }
-
         private bool areAllNewTiresAtCorrectMaxPressure(List<Tire> i_NewTires)
         {
             bool isTiresAtCorrectMaxPressure = true;
@@ -103,11 +86,6 @@ namespace Ex03.GarageLogic
             }
 
             return isTiresAtCorrectMaxPressure;
-        }
-
-        public override int GetHashCode()
-        {
-            return m_LicenseNumber.GetHashCode();
         }
 
         public abstract float MaxTireAirPressure { get; }

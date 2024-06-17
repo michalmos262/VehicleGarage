@@ -23,7 +23,7 @@ namespace Ex03.GarageLogic
             }
             set 
             {
-                if (value <= r_MaxEnergyAmount)
+                if (value <= r_MaxEnergyAmount && value >= 0)
                 {
                     m_CurrentEnergyAmount = value;
                 }
@@ -31,14 +31,6 @@ namespace Ex03.GarageLogic
                 {
                     throw new ValueOutOfRangeException(k_MinEnergyAmount, r_MaxEnergyAmount);
                 }
-            }
-        }
-
-        public float MaxEnergyAmount
-        {
-            get
-            {
-                return r_MaxEnergyAmount;
             }
         }
 
