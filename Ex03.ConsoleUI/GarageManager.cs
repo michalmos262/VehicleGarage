@@ -53,7 +53,6 @@ Please enter an option number (or any other key to exit):
         private static void setVehicleTypeDetails(Vehicle io_vehicle)
         {
             List<string> vehicleDetails;
-            List<string> userInputsList = new List<string>();
             string userInput;
             bool isVehicleSet = false;
 
@@ -61,6 +60,8 @@ Please enter an option number (or any other key to exit):
             {
                 try
                 {
+                    List<string> userInputsList = new List<string>();
+
                     Console.WriteLine("Please enter the details below:");
                     vehicleDetails = io_vehicle.RequestAdditionalVehicleDetails();
                     foreach (string vehicleDetail in vehicleDetails)
@@ -160,14 +161,14 @@ Please enter an option number (or any other key to exit):
             }
         }
 
-        private Vehicle getVehicleFromUser(string i_LicenseNumber)
+        private Vehicle getVehicleDetailsFromUser(string i_LicenseNumber)
         {
             printVehicleTypes();
             string vehicleTypeChoice = Console.ReadLine();
             eVehicleType vehicleType =
                 (eVehicleType)TryParseEnum(vehicleTypeChoice, getMaxValueInEnum<eVehicleType>());
             Vehicle vehicle = m_VehicleFactory.MakeNewVehicle(vehicleType, i_LicenseNumber);
-            Console.WriteLine("Enter model Name:");
+            Console.WriteLine("Enter model name:");
             vehicle.ModelName = Console.ReadLine();
             setVehicleTypeDetails(vehicle);
             setEnergyResourceDetails(vehicle.Engine);
@@ -190,7 +191,7 @@ Please enter an option number (or any other key to exit):
             {
                 try
                 {
-                    vehicle = getVehicleFromUser(i_LicenseNumber);
+                    vehicle = getVehicleDetailsFromUser(i_LicenseNumber);
                     m_Garage.AddNewVehicleToGarage(vehicle, ownerName, ownerPhoneNumber);
 
                     isAddedToGarage = true;
@@ -213,15 +214,16 @@ Please enter an option number (or any other key to exit):
 
         private void insertNewVehicle()
         {
+            string licenseNumber = getLicenseNumberFromUser();
+
             try
             {
-                string licenseNumber = getLicenseNumberFromUser();
-
                 if (m_Garage.IsVehicleInGarage(licenseNumber))
                 {
+                    VehicleRecordInGarage vehicleRecord = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber);
                     Console.WriteLine(
                         $"Vehicle is already in the garage, moving its status to: {eVehicleStatus.InRepair}");
-                    m_Garage.ChangeVehicleStatus(licenseNumber, eVehicleStatus.InRepair);
+                    m_Garage.ChangeVehicleStatus(vehicleRecord, eVehicleStatus.InRepair);
                 }
                 else
                 {
@@ -302,7 +304,8 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                eVehicleStatus previousVehicleStatus = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).VehicleStatus;
+                VehicleRecordInGarage vehicleRecord = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber);
+                eVehicleStatus previousVehicleStatus = vehicleRecord.VehicleStatus;
                 Console.WriteLine("To which status to move?");
                 int maxValueInEnum = getMaxValueInEnum<eVehicleStatus>();
                 printEnum(typeof(eVehicleStatus), maxValueInEnum);
@@ -310,7 +313,7 @@ Please enter an option number (or any other key to exit):
                 try
                 {
                     eVehicleStatus newVehicleStatus = (eVehicleStatus)TryParseEnum(userInput, maxValueInEnum);
-                    m_Garage.ChangeVehicleStatus(licenseNumber, newVehicleStatus);
+                    m_Garage.ChangeVehicleStatus(vehicleRecord, newVehicleStatus);
                     Console.WriteLine($"Vehicle status was changed from {previousVehicleStatus} to {newVehicleStatus}!");
                 }
                 catch (Exception exception)
@@ -330,7 +333,8 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                m_Garage.InflateVehicleTiresToMaximumByLicenseNumber(licenseNumber);
+                Vehicle vehicle = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).Vehicle;
+                m_Garage.InflateVehicleTiresToMaximumByLicenseNumber(vehicle);
                 Console.WriteLine("Inflation of the vehicle tires to maximum air pressure succeeded!");
             }
             catch (Exception exception)
@@ -345,7 +349,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                m_Garage.VerifyIfVehicleIsInGarage(licenseNumber);
+                Vehicle vehicle = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).Vehicle;
                 Console.WriteLine("Enter the amount of fuel to add to the vehicle:");
                 string fuelAmountInput = Console.ReadLine();
                 float fuelToAdd = TryParseFloat(fuelAmountInput);
@@ -354,7 +358,7 @@ Please enter an option number (or any other key to exit):
                 printEnum(typeof(eFuelType), maxValueInEnum);
                 string optionChoiceInput = Console.ReadLine();
                 eFuelType fuelType = (eFuelType)TryParseEnum(optionChoiceInput, maxValueInEnum);
-                m_Garage.ReFuelVehicle(licenseNumber, fuelType, fuelToAdd);
+                m_Garage.RefuelVehicle(vehicle, fuelType, fuelToAdd);
                 Console.WriteLine("Refueling succeeded!");
             }
             catch (Exception exception)
@@ -369,7 +373,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                m_Garage.VerifyIfVehicleIsInGarage(licenseNumber);
+                Vehicle vehicle = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).Vehicle;
                 Console.WriteLine("Enter the additional time amount for charging (in minutes):");
                 string timeAmountInMinutesInput = Console.ReadLine();
 
@@ -377,7 +381,7 @@ Please enter an option number (or any other key to exit):
                 {
                     float timeAmountInMinutes = TryParseFloat(timeAmountInMinutesInput);
                     float timeAmountInHours = timeAmountInMinutes / 60;
-                    m_Garage.ReChargeVehicle(licenseNumber, timeAmountInHours);
+                    m_Garage.ChargeVehicle(vehicle, timeAmountInHours);
                     Console.WriteLine("Charging succeeded!");
                 }
                 catch (Exception exception)
@@ -391,19 +395,20 @@ Please enter an option number (or any other key to exit):
             }
         }
 
-        private void getVechileFromUserAndPrintHisInformation()
+        private void getVechileFromUserAndPrintItsInformation()
         {
-            string licenseNumber = getLicenseNumberFromUser();
             Dictionary<string, string> vehicleDetailsDict;
+            string licenseNumber = getLicenseNumberFromUser();
             
             try
             {
+                VehicleRecordInGarage vehicleRecord = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber);
                 Console.WriteLine("\nVehicle data:");
                 Console.WriteLine("-------------");
-                vehicleDetailsDict = m_Garage.GetAllVehicleInformation(licenseNumber);
+                vehicleDetailsDict = m_Garage.GetAllVehicleInformation(vehicleRecord);
                 foreach (string carAttribute in vehicleDetailsDict.Keys)
                 {
-                    Console.WriteLine(string.Format("{0}: {1}", carAttribute, vehicleDetailsDict[carAttribute]));
+                    Console.WriteLine("{0}: {1}", carAttribute, vehicleDetailsDict[carAttribute]);
                 }
 
             }
@@ -436,7 +441,7 @@ Please enter an option number (or any other key to exit):
                     chargeVehicle();
                     break;
                 case eMenuOption.ShowVehicleInformation:
-                    getVechileFromUserAndPrintHisInformation();
+                    getVechileFromUserAndPrintItsInformation();
                     break;
                 default:
                     m_IsQuit = true;

@@ -13,11 +13,18 @@ namespace Ex03.GarageLogic
             m_VehicleRecords[i_Vehicle.LicenseNumber] = new VehicleRecordInGarage(i_Vehicle, i_OwnerName, i_OwnerPhoneNumber);
         }
 
+        private void verifyIfVehicleInGarage(string i_LicenseNumber)
+        {
+            if (!IsVehicleInGarage(i_LicenseNumber))
+            {
+                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist in the garage!");
+            }
+        }
+
         public VehicleRecordInGarage GetVehicleRecordByLicenseNumber(string i_LicenseNumber)
         {
-            VerifyIfVehicleIsInGarage(i_LicenseNumber);
-
-            return m_VehicleRecords[i_LicenseNumber]; ;
+            verifyIfVehicleInGarage(i_LicenseNumber);
+            return m_VehicleRecords[i_LicenseNumber];
         }
 
         public bool IsGarageEmpty()
@@ -28,21 +35,6 @@ namespace Ex03.GarageLogic
         public bool IsVehicleInGarage(string i_LicenseNumber)
         {
             return m_VehicleRecords.ContainsKey(i_LicenseNumber);
-        }
-
-        private Vehicle getVehicleByLicenseNumber(string i_LicenseNumber)
-        {
-            VehicleRecordInGarage requestedVehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
-
-            return requestedVehicleRecord != null ? requestedVehicleRecord.Vehicle : null;
-        }
-
-        public void VerifyIfVehicleIsInGarage(string i_LicenseNumber)
-        {
-            if (!IsVehicleInGarage(i_LicenseNumber))
-            {
-                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist in the garage!");
-            }
         }
 
         public List<Tire> MakeNewTiresForVehicle(Vehicle i_Vehicle)
@@ -57,35 +49,30 @@ namespace Ex03.GarageLogic
             return newTires;
         }
 
-        public void InflateVehicleTiresToMaximumByLicenseNumber(string i_LicenseNumber)
+        public void InflateVehicleTiresToMaximumByLicenseNumber(Vehicle io_Vehicle)
         {
-            Vehicle vehicle;
             float additionalAirPressureNeededForMaxPressure;
 
-            vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            foreach (Tire tire in vehicle.Tires)
+            foreach (Tire tire in io_Vehicle.Tires)
             {
                 additionalAirPressureNeededForMaxPressure = tire.MaxAirPressure - tire.CurrentAirPressure;
                 tire.Inflate(additionalAirPressureNeededForMaxPressure);
             }
         }
 
-        public void ReFuelVehicle(string i_LicenseNumber, FuelTank.eFuelType i_FuelType, float i_AdditionalFuelInLiters)
+        public void RefuelVehicle(Vehicle io_Vehicle, FuelTank.eFuelType i_FuelType, float i_AdditionalFuelInLiters)
         {
-            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
+            io_Vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
         }
 
-        public void ReChargeVehicle(string i_LicenseNumber, float i_AdditionalChargingTimeInHours)
+        public void ChargeVehicle(Vehicle io_Vehicle, float i_AdditionalChargingTimeInHours)
         {
-            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
+            io_Vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
         }
 
-        public void ChangeVehicleStatus(string i_LicenseNumber, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
+        public void ChangeVehicleStatus(VehicleRecordInGarage io_VehicleRecord, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
         {
-            VehicleRecordInGarage vehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
-            vehicleRecord.VehicleStatus = i_NewVehicleStatus;
+            io_VehicleRecord.VehicleStatus = i_NewVehicleStatus;
         }
 
         public List<string> GetLicenseNumbersList(VehicleRecordInGarage.eVehicleStatus? i_VehicleStatusFilter = null)
@@ -119,20 +106,16 @@ namespace Ex03.GarageLogic
             return licenseNumbersListFilteredByStatus.Count == 0 ? null : licenseNumbersListFilteredByStatus;
         }
 
-        public Dictionary<string, string> GetAllVehicleInformation(string i_LicenseNumber)
+        public Dictionary<string, string> GetAllVehicleInformation(VehicleRecordInGarage i_VehicleRecord)
         {
-            Vehicle vehicle;
-            VehicleRecordInGarage vehicleRecord;
             Dictionary<string, string> allVehicleDetails = new Dictionary<string, string>(), basicVehicleDetails, specificVehicleDetails;
 
-            vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
-            allVehicleDetails.Add("owner name", string.IsNullOrEmpty(vehicleRecord.OwnerName) ? "" : vehicleRecord.OwnerName);
-            allVehicleDetails.Add("status", vehicleRecord.VehicleStatus.ToString());
-            allVehicleDetails.Add("Owner phone number", string.IsNullOrEmpty(vehicleRecord.OwnerPhoneNumber) ? "" : vehicleRecord.OwnerPhoneNumber);
-            basicVehicleDetails = getBasicVehicleInfo(vehicle);
+            allVehicleDetails.Add("owner name", string.IsNullOrEmpty(i_VehicleRecord.OwnerName) ? "" : i_VehicleRecord.OwnerName);
+            allVehicleDetails.Add("status", i_VehicleRecord.VehicleStatus.ToString());
+            allVehicleDetails.Add("Owner phone number", string.IsNullOrEmpty(i_VehicleRecord.OwnerPhoneNumber) ? "" : i_VehicleRecord.OwnerPhoneNumber);
+            basicVehicleDetails = getBasicVehicleInfo(i_VehicleRecord.Vehicle);
             allVehicleDetails = allVehicleDetails.Concat(basicVehicleDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
-            specificVehicleDetails = vehicle.GetSpecificVehicleTypeDetails();
+            specificVehicleDetails = i_VehicleRecord.Vehicle.GetSpecificVehicleTypeDetails();
             allVehicleDetails = allVehicleDetails.Concat(specificVehicleDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
 
             return allVehicleDetails;
