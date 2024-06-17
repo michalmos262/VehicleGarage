@@ -119,7 +119,7 @@ namespace Ex03.GarageLogic
             return licenseNumbersListFilteredByStatus.Count == 0 ? null : licenseNumbersListFilteredByStatus;
         }
 
-        public Dictionary<string, string> GetAllVehicleDetails(string i_LicenseNumber)
+        public Dictionary<string, string> GetAllVehicleInformation(string i_LicenseNumber)
         {
             Vehicle vehicle;
             VehicleRecordInGarage vehicleRecord;
