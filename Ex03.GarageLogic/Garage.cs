@@ -15,18 +15,9 @@ namespace Ex03.GarageLogic
 
         public VehicleRecordInGarage GetVehicleRecordByLicenseNumber(string i_LicenseNumber)
         {
-            VehicleRecordInGarage requestedVehicleRecord = null;
+            VerifyIfVehicleIsInGarage(i_LicenseNumber);
 
-            if (IsVehicleInGarage(i_LicenseNumber))
-            {
-                requestedVehicleRecord = m_VehicleRecords[i_LicenseNumber];
-            }
-            else
-            {
-                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist!");
-            }
-            
-            return requestedVehicleRecord;
+            return m_VehicleRecords[i_LicenseNumber]; ;
         }
 
         public bool IsGarageEmpty()
@@ -44,6 +35,14 @@ namespace Ex03.GarageLogic
             VehicleRecordInGarage requestedVehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
 
             return requestedVehicleRecord != null ? requestedVehicleRecord.Vehicle : null;
+        }
+
+        public void VerifyIfVehicleIsInGarage(string i_LicenseNumber)
+        {
+            if (!IsVehicleInGarage(i_LicenseNumber))
+            {
+                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist in the garage!");
+            }
         }
 
         public List<Tire> MakeNewTiresForVehicle(Vehicle i_Vehicle)
@@ -140,10 +139,12 @@ namespace Ex03.GarageLogic
 
         private Dictionary<string, string> getBasicVehicleInfo(Vehicle i_Vehicle)
         {
-            Dictionary<string, string> basicVehicleDetails = new Dictionary<string, string>(), energeyTankDetails;
+            Dictionary<string, string> basicVehicleDetails = new Dictionary<string, string>
+            {
+                { "License number", string.IsNullOrEmpty(i_Vehicle.LicenseNumber) ? "" : i_Vehicle.LicenseNumber },
+                { "Model", string.IsNullOrEmpty(i_Vehicle.ModelName) ? "" : i_Vehicle.ModelName }
+            }, energeyTankDetails;
 
-            basicVehicleDetails.Add("License number", string.IsNullOrEmpty(i_Vehicle.LicenseNumber) ? "" : i_Vehicle.LicenseNumber);
-            basicVehicleDetails.Add("Model", string.IsNullOrEmpty(i_Vehicle.ModelName) ? "" : i_Vehicle.ModelName);
             energeyTankDetails = i_Vehicle.Engine.GetSpecificEnergyTypeDetails();
             basicVehicleDetails = basicVehicleDetails.Concat(energeyTankDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
             if (i_Vehicle.Tires != null && i_Vehicle.Tires.Count > 0 && !string.IsNullOrEmpty(i_Vehicle.Tires[0].ManufacturerName))

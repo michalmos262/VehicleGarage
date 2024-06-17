@@ -258,19 +258,12 @@ Please enter an option number (or any other key to exit):
 
         private void printLicenseNumbers(List<string> i_LicenseNumbers)
         {
-            if (i_LicenseNumbers == null)
+            Console.WriteLine("The license numbers:");
+            int i = 1;
+            foreach (string licenseNumber in i_LicenseNumbers)
             {
-                Console.WriteLine("No license numbers to show!");
-            }
-            else
-            {
-                Console.WriteLine("The license numbers:");
-                int i = 1;
-                foreach (string licenseNumber in i_LicenseNumbers)
-                {
-                    Console.WriteLine($"{i}. {licenseNumber}");
-                    i++;
-                }
+                Console.WriteLine($"{i}. {licenseNumber}");
+                i++;
             }
         }
 
@@ -352,6 +345,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
+                m_Garage.VerifyIfVehicleIsInGarage(licenseNumber);
                 Console.WriteLine("Enter the amount of fuel to add to the vehicle:");
                 string fuelAmountInput = Console.ReadLine();
                 float fuelToAdd = TryParseFloat(fuelAmountInput);
@@ -375,6 +369,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
+                m_Garage.VerifyIfVehicleIsInGarage(licenseNumber);
                 Console.WriteLine("Enter the additional time amount for charging (in minutes):");
                 string timeAmountInMinutesInput = Console.ReadLine();
 
