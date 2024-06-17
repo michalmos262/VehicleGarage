@@ -369,6 +369,26 @@ Please enter an option number (or any other key to exit):
             }
         }
 
+        private void getVechileFromUserAndPrintHisInformation()
+        {
+            string licenseNumber = getLicenseNumberFromUser();
+            Dictionary<string, string> vehicleDetailsDict;
+
+            try
+            {
+                vehicleDetailsDict = m_Garage.GetAllVehicleInformation(licenseNumber);
+                foreach (string carAttribute in vehicleDetailsDict.Keys)
+                {
+                    Console.WriteLine(string.Format("attribute = {0} | Info = {1}", carAttribute, vehicleDetailsDict[carAttribute]));
+                }
+
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+
         private void makeGarageAction(eMenuOption i_MenuOption)
         {
             switch (i_MenuOption)
@@ -392,7 +412,7 @@ Please enter an option number (or any other key to exit):
                     chargeVehicle();
                     break;
                 case eMenuOption.ShowVehicleInformation:
-                    //TODO: show vehicle information option
+                    getVechileFromUserAndPrintHisInformation();
                     break;
                 default:
                     m_IsQuit = true;
