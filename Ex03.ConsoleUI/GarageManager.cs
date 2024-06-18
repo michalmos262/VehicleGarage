@@ -118,6 +118,7 @@ Please enter an option number (or any other key to exit):
         private static void getTireDetails(Tire io_Tire)
         {
             bool isValidInput = false;
+
             Console.WriteLine("Enter the manufacturer Name:");
             io_Tire.ManufacturerName = Console.ReadLine();
             while (!isValidInput)
@@ -174,6 +175,7 @@ Please enter an option number (or any other key to exit):
             setEnergyResourceDetails(vehicle.Engine);
             vehicle.Tires = m_Garage.MakeNewTiresForVehicle(vehicle);
             setTiresDetails(vehicle.Tires);
+
             return vehicle;
         }
 
@@ -239,6 +241,7 @@ Please enter an option number (or any other key to exit):
         private static void printEnum(Type i_TypeOfEnum, int i_EnumSize)
         {
             string enumKey;
+
             for (int i = 1; i <= i_EnumSize; i++)
             {
                 enumKey = Enum.GetName(i_TypeOfEnum, i);
@@ -253,6 +256,7 @@ Please enter an option number (or any other key to exit):
             printEnum(typeof(eVehicleStatus), maxValueInEnum);
             string userInput = Console.ReadLine();
             eVehicleStatus statusChoice = (eVehicleStatus)TryParseEnum(userInput, maxValueInEnum);
+
             return statusChoice;
         }
 
@@ -386,8 +390,7 @@ Please enter an option number (or any other key to exit):
                 try
                 {
                     float timeAmountInMinutes = TryParseFloat(timeAmountInMinutesInput);
-                    float timeAmountInHours = timeAmountInMinutes / 60;
-                    m_Garage.ChargeVehicle(licenseNumber, timeAmountInHours);
+                    m_Garage.ChargeVehicle(licenseNumber, timeAmountInMinutes);
                     Console.WriteLine("Charging succeeded!");
                 }
                 catch (Exception exception)
