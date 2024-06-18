@@ -245,7 +245,6 @@ Please enter an option number (or any other key to exit):
                 enumKey = Enum.GetName(i_TypeOfEnum, i);
                 Console.WriteLine("({0}) {1}", i, enumKey);
             }
-
         }
 
         private eVehicleStatus getVehicleStatus()
@@ -304,6 +303,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
+                m_Garage.VerifyIfVehicleInGarage(licenseNumber);
                 VehicleRecordInGarage vehicleRecord = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber);
                 eVehicleStatus previousVehicleStatus = vehicleRecord.VehicleStatus;
                 Console.WriteLine("To which status to move?");
@@ -333,8 +333,8 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                Vehicle vehicle = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).Vehicle;
-                m_Garage.InflateVehicleTiresToMaximumByLicenseNumber(vehicle);
+                m_Garage.VerifyIfVehicleInGarage(licenseNumber);
+                m_Garage.InflateVehicleTiresToMaximumByLicenseNumber(licenseNumber);
                 Console.WriteLine("Inflation of the vehicle tires to maximum air pressure succeeded!");
             }
             catch (Exception exception)
@@ -349,7 +349,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                Vehicle vehicle = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).Vehicle;
+                m_Garage.VerifyIfVehicleInGarage(licenseNumber);
                 Console.WriteLine("Enter the amount of fuel to add to the vehicle:");
                 string fuelAmountInput = Console.ReadLine();
                 float fuelToAdd = TryParseFloat(fuelAmountInput);
@@ -358,7 +358,7 @@ Please enter an option number (or any other key to exit):
                 printEnum(typeof(eFuelType), maxValueInEnum);
                 string optionChoiceInput = Console.ReadLine();
                 eFuelType fuelType = (eFuelType)TryParseEnum(optionChoiceInput, maxValueInEnum);
-                m_Garage.RefuelVehicle(vehicle, fuelType, fuelToAdd);
+                m_Garage.RefuelVehicle(licenseNumber, fuelType, fuelToAdd);
                 Console.WriteLine("Refueling succeeded!");
             }
             catch (Exception exception)
@@ -373,7 +373,7 @@ Please enter an option number (or any other key to exit):
 
             try
             {
-                Vehicle vehicle = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber).Vehicle;
+                m_Garage.VerifyIfVehicleInGarage(licenseNumber);
                 Console.WriteLine("Enter the additional time amount for charging (in minutes):");
                 string timeAmountInMinutesInput = Console.ReadLine();
 
@@ -381,7 +381,7 @@ Please enter an option number (or any other key to exit):
                 {
                     float timeAmountInMinutes = TryParseFloat(timeAmountInMinutesInput);
                     float timeAmountInHours = timeAmountInMinutes / 60;
-                    m_Garage.ChargeVehicle(vehicle, timeAmountInHours);
+                    m_Garage.ChargeVehicle(licenseNumber, timeAmountInHours);
                     Console.WriteLine("Charging succeeded!");
                 }
                 catch (Exception exception)
@@ -402,10 +402,10 @@ Please enter an option number (or any other key to exit):
             
             try
             {
-                VehicleRecordInGarage vehicleRecord = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber);
+                m_Garage.VerifyIfVehicleInGarage(licenseNumber);
                 Console.WriteLine("\nVehicle data:");
                 Console.WriteLine("-------------");
-                vehicleDetailsDict = m_Garage.GetAllVehicleInformation(vehicleRecord);
+                vehicleDetailsDict = m_Garage.GetAllVehicleInformation(licenseNumber);
                 foreach (string carAttribute in vehicleDetailsDict.Keys)
                 {
                     Console.WriteLine("{0}: {1}", carAttribute, vehicleDetailsDict[carAttribute]);
