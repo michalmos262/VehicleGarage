@@ -136,23 +136,24 @@ Please enter an option number (or any other key to exit):
             }
         }
 
-        private void setTiresDetails(List<Tire> io_Tires)
+        private void setTiresDetails(Vehicle io_Vehicle)
         {
             int i = 1;
             bool isAllTiresTheSame = isSetAllTires();
 
+            io_Vehicle.Tires = m_Garage.MakeNewTiresForVehicle(io_Vehicle);
             if (isAllTiresTheSame)
             {
-                getTireDetails(io_Tires[0]);
-                foreach (Tire tire in io_Tires)
+                getTireDetails(io_Vehicle.Tires[0]);
+                foreach (Tire tire in io_Vehicle.Tires)
                 {
-                    tire.CurrentAirPressure = io_Tires[0].CurrentAirPressure;
-                    tire.ManufacturerName = io_Tires[0].ManufacturerName;
+                    tire.CurrentAirPressure = io_Vehicle.Tires[0].CurrentAirPressure;
+                    tire.ManufacturerName = io_Vehicle.Tires[0].ManufacturerName;
                 }
             }
             else
             {
-                foreach (Tire tire in io_Tires)
+                foreach (Tire tire in io_Vehicle.Tires)
                 {
                     Console.WriteLine("Enter tire {0} details:", i);
                     getTireDetails(tire);
@@ -172,8 +173,7 @@ Please enter an option number (or any other key to exit):
             vehicle.ModelName = Console.ReadLine();
             setVehicleTypeDetails(vehicle);
             setEnergyResourceDetails(vehicle.Engine);
-            vehicle.Tires = m_Garage.MakeNewTiresForVehicle(vehicle);
-            setTiresDetails(vehicle.Tires);
+            setTiresDetails(vehicle);
             return vehicle;
         }
 
@@ -468,7 +468,7 @@ Please enter an option number (or any other key to exit):
             Console.WriteLine("Welcome the the garage!");
         }
 
-        private void printGoodBye()
+        private void printGoodbye()
         {
             Console.WriteLine(@"
           ______
@@ -491,12 +491,12 @@ Please enter an option number (or any other key to exit):
                     eMenuOption chosenMenuOption = (eMenuOption)TryParseEnum(userInput, getMaxValueInEnum<eMenuOption>());
                     makeGarageAction(chosenMenuOption);
                 }
-                printGoodBye();
+                printGoodbye();
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
-                printGoodBye();
+                printGoodbye();
             }
         }
     }
