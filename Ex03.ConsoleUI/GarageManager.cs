@@ -220,10 +220,9 @@ Please enter an option number (or any other key to exit):
             {
                 if (m_Garage.IsVehicleInGarage(licenseNumber))
                 {
-                    VehicleRecordInGarage vehicleRecord = m_Garage.GetVehicleRecordByLicenseNumber(licenseNumber);
                     Console.WriteLine(
                         $"Vehicle is already in the garage, moving its status to: {eVehicleStatus.InRepair}");
-                    m_Garage.ChangeVehicleStatus(vehicleRecord, eVehicleStatus.InRepair);
+                    m_Garage.ChangeVehicleStatus(licenseNumber, eVehicleStatus.InRepair);
                 }
                 else
                 {
@@ -313,7 +312,7 @@ Please enter an option number (or any other key to exit):
                 try
                 {
                     eVehicleStatus newVehicleStatus = (eVehicleStatus)TryParseEnum(userInput, maxValueInEnum);
-                    m_Garage.ChangeVehicleStatus(vehicleRecord, newVehicleStatus);
+                    m_Garage.ChangeVehicleStatus(licenseNumber, newVehicleStatus);
                     Console.WriteLine($"Vehicle status was changed from {previousVehicleStatus} to {newVehicleStatus}!");
                 }
                 catch (Exception exception)

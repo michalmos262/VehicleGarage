@@ -70,9 +70,9 @@ namespace Ex03.GarageLogic
             m_VehicleRecords[i_LicenseNumber].Vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
         }
 
-        public void ChangeVehicleStatus(VehicleRecordInGarage io_VehicleRecord, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
+        public void ChangeVehicleStatus(string i_LicenseNumber, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
         {
-            io_VehicleRecord.VehicleStatus = i_NewVehicleStatus;
+            m_VehicleRecords[i_LicenseNumber].VehicleStatus = i_NewVehicleStatus;
         }
 
         public List<string> GetLicenseNumbersList(VehicleRecordInGarage.eVehicleStatus? i_VehicleStatusFilter = null)
