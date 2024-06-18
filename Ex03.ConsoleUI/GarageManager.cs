@@ -470,7 +470,7 @@ Please enter an option number (or any other key to exit):
             Console.WriteLine("Welcome the the garage!");
         }
 
-        private void printGoodbye()
+        private void printGoodBye()
         {
             Console.WriteLine(@"
           ______
@@ -493,12 +493,12 @@ Please enter an option number (or any other key to exit):
                     eMenuOption chosenMenuOption = (eMenuOption)TryParseEnum(userInput, getMaxValueInEnum<eMenuOption>());
                     makeGarageAction(chosenMenuOption);
                 }
-                printGoodbye();
+                printGoodBye();
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
-                printGoodbye();
+                printGoodBye();
             }
         }
     }
