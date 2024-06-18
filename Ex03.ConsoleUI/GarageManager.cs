@@ -258,12 +258,19 @@ Please enter an option number (or any other key to exit):
 
         private void printLicenseNumbers(List<string> i_LicenseNumbers)
         {
-            Console.WriteLine("The license numbers:");
-            int i = 1;
-            foreach (string licenseNumber in i_LicenseNumbers)
+            if (i_LicenseNumbers == null)
             {
-                Console.WriteLine($"{i}. {licenseNumber}");
-                i++;
+                Console.WriteLine("No license numbers to show!");
+            }
+            else
+            {
+                Console.WriteLine("The license numbers:");
+                int i = 1;
+                foreach (string licenseNumber in i_LicenseNumbers)
+                {
+                    Console.WriteLine($"{i}. {licenseNumber}");
+                    i++;
+                }
             }
         }
 
