@@ -13,20 +13,17 @@ namespace Ex03.GarageLogic
             m_VehicleRecords[i_Vehicle.LicenseNumber] = new VehicleRecordInGarage(i_Vehicle, i_OwnerName, i_OwnerPhoneNumber);
         }
 
+        public void VerifyIfVehicleInGarage(string i_LicenseNumber)
+        {
+            if (!IsVehicleInGarage(i_LicenseNumber))
+            {
+                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist in the garage!");
+            }
+        }
+
         public VehicleRecordInGarage GetVehicleRecordByLicenseNumber(string i_LicenseNumber)
         {
-            VehicleRecordInGarage requestedVehicleRecord = null;
-
-            if (IsVehicleInGarage(i_LicenseNumber))
-            {
-                requestedVehicleRecord = m_VehicleRecords[i_LicenseNumber];
-            }
-            else
-            {
-                throw new Exception($"Vehicle with license number {i_LicenseNumber} does not exist!");
-            }
-            
-            return requestedVehicleRecord;
+            return m_VehicleRecords[i_LicenseNumber];
         }
 
         public bool IsGarageEmpty()
@@ -39,13 +36,6 @@ namespace Ex03.GarageLogic
             return m_VehicleRecords.ContainsKey(i_LicenseNumber);
         }
 
-        private Vehicle getVehicleByLicenseNumber(string i_LicenseNumber)
-        {
-            VehicleRecordInGarage requestedVehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
-
-            return requestedVehicleRecord != null ? requestedVehicleRecord.Vehicle : null;
-        }
-
         public List<Tire> MakeNewTiresForVehicle(Vehicle i_Vehicle)
         {
             List <Tire> newTires = new List<Tire>(i_Vehicle.NumOfTires);
@@ -54,38 +44,35 @@ namespace Ex03.GarageLogic
             {
                 newTires.Add(new Tire(i_Vehicle.MaxTireAirPressure));
             }
+
             return newTires;
         }
 
         public void InflateVehicleTiresToMaximumByLicenseNumber(string i_LicenseNumber)
         {
-            Vehicle vehicle;
             float additionalAirPressureNeededForMaxPressure;
+            List<Tire> vehicleTires = m_VehicleRecords[i_LicenseNumber].Vehicle.Tires;
 
-            vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            foreach (Tire tire in vehicle.Tires)
+            foreach (Tire tire in vehicleTires)
             {
                 additionalAirPressureNeededForMaxPressure = tire.MaxAirPressure - tire.CurrentAirPressure;
                 tire.Inflate(additionalAirPressureNeededForMaxPressure);
             }
         }
 
-        public void ReFuelVehicle(string i_LicenseNumber, FuelTank.eFuelType i_FuelType, float i_AdditionalFuelInLiters)
+        public void RefuelVehicle(string i_LicenseNumber, FuelTank.eFuelType i_FuelType, float i_AdditionalFuelInLiters)
         {
-            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
+            m_VehicleRecords[i_LicenseNumber].Vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
         }
 
-        public void ReChargeVehicle(string i_LicenseNumber, float i_AdditionalChargingTimeInHours)
+        public void ChargeVehicle(string i_LicenseNumber, float i_AdditionalChargingTimeInHours)
         {
-            Vehicle vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
+            m_VehicleRecords[i_LicenseNumber].Vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
         }
 
         public void ChangeVehicleStatus(string i_LicenseNumber, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)
         {
-            VehicleRecordInGarage vehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
-            vehicleRecord.VehicleStatus = i_NewVehicleStatus;
+            m_VehicleRecords[i_LicenseNumber].VehicleStatus = i_NewVehicleStatus;
         }
 
         public List<string> GetLicenseNumbersList(VehicleRecordInGarage.eVehicleStatus? i_VehicleStatusFilter = null)
@@ -121,17 +108,15 @@ namespace Ex03.GarageLogic
 
         public Dictionary<string, string> GetAllVehicleInformation(string i_LicenseNumber)
         {
-            Vehicle vehicle;
-            VehicleRecordInGarage vehicleRecord;
             Dictionary<string, string> allVehicleDetails = new Dictionary<string, string>(), basicVehicleDetails, specificVehicleDetails;
+            VehicleRecordInGarage vehicleRecord = m_VehicleRecords[i_LicenseNumber];
 
-            vehicle = getVehicleByLicenseNumber(i_LicenseNumber);
-            vehicleRecord = GetVehicleRecordByLicenseNumber(i_LicenseNumber);
             allVehicleDetails.Add("owner name", string.IsNullOrEmpty(vehicleRecord.OwnerName) ? "" : vehicleRecord.OwnerName);
             allVehicleDetails.Add("status", vehicleRecord.VehicleStatus.ToString());
-            basicVehicleDetails = getBasicVehicleInfo(vehicle);
+            allVehicleDetails.Add("Owner phone number", string.IsNullOrEmpty(vehicleRecord.OwnerPhoneNumber) ? "" : vehicleRecord.OwnerPhoneNumber);
+            basicVehicleDetails = getBasicVehicleInfo(vehicleRecord.Vehicle);
             allVehicleDetails = allVehicleDetails.Concat(basicVehicleDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
-            specificVehicleDetails = vehicle.GetSpecificVehicleTypeDetails();
+            specificVehicleDetails = vehicleRecord.Vehicle.GetSpecificVehicleTypeDetails();
             allVehicleDetails = allVehicleDetails.Concat(specificVehicleDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
 
             return allVehicleDetails;
@@ -139,10 +124,12 @@ namespace Ex03.GarageLogic
 
         private Dictionary<string, string> getBasicVehicleInfo(Vehicle i_Vehicle)
         {
-            Dictionary<string, string> basicVehicleDetails = new Dictionary<string, string>(), energeyTankDetails;
+            Dictionary<string, string> basicVehicleDetails = new Dictionary<string, string>
+            {
+                { "License number", string.IsNullOrEmpty(i_Vehicle.LicenseNumber) ? "" : i_Vehicle.LicenseNumber },
+                { "Model", string.IsNullOrEmpty(i_Vehicle.ModelName) ? "" : i_Vehicle.ModelName }
+            }, energeyTankDetails;
 
-            basicVehicleDetails.Add("License number", string.IsNullOrEmpty(i_Vehicle.LicenseNumber) ? "" : i_Vehicle.LicenseNumber);
-            basicVehicleDetails.Add("Model", string.IsNullOrEmpty(i_Vehicle.ModelName) ? "" : i_Vehicle.ModelName);
             energeyTankDetails = i_Vehicle.Engine.GetSpecificEnergyTypeDetails();
             basicVehicleDetails = basicVehicleDetails.Concat(energeyTankDetails).ToDictionary(detail => detail.Key, detail => detail.Value);
             if (i_Vehicle.Tires != null && i_Vehicle.Tires.Count > 0 && !string.IsNullOrEmpty(i_Vehicle.Tires[0].ManufacturerName))
@@ -150,7 +137,7 @@ namespace Ex03.GarageLogic
                 basicVehicleDetails.Add("Tires manufacturer", i_Vehicle.Tires[0].ManufacturerName);
                 for (int i = 0; i < i_Vehicle.Tires.Count; i++)
                 {
-                    basicVehicleDetails.Add($"Air pressure in tire number {i + 1}", i_Vehicle.Tires[i].CurrentAirPressure.ToString());
+                    basicVehicleDetails.Add($"Air pressure in tire #{i + 1}", i_Vehicle.Tires[i].CurrentAirPressure.ToString());
                 }
             }
 

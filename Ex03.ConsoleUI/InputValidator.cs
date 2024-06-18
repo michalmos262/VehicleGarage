@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Ex03.ConsoleUI.GarageManager;
 
 namespace Ex03.ConsoleUI
 {
     public class InputValidator
     {
-        public static int ParseEnumOption(string i_UserInput, int i_MaxValue)
+        public static int TryParseEnum(string i_UserInput, int i_MaxValue)
         {
             bool isCorrectParsing = int.TryParse(i_UserInput, out int parsedValue);
 

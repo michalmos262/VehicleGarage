@@ -21,18 +21,6 @@ namespace Ex03.GarageLogic
             
         }
 
-        public bool IsTransportingHazardousMaterials
-        {
-            get
-            {
-                return m_IsTransportingHazardousMaterials;
-            }
-            set
-            {
-                m_IsTransportingHazardousMaterials = value;
-            }
-        }
-
         public float CargoVolume
         {
             get
@@ -84,7 +72,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override FuelTank.eFuelType FuelType
+        public override eFuelType FuelType
         {
             get
             {
@@ -114,24 +102,17 @@ namespace Ex03.GarageLogic
             {
                 throw new FormatException("Cargo volume must be a number!");
             }
-            if (i_VehicleTypeDetails[k_IsTransportingHazardousMaterialsIndex] == "yes")
-            {
-                m_IsTransportingHazardousMaterials = true;
-            }
-            else
-            {
-                m_IsTransportingHazardousMaterials = false;
-            }
+
+            m_IsTransportingHazardousMaterials = i_VehicleTypeDetails[k_IsTransportingHazardousMaterialsIndex] == "yes";
         }
 
         public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
         {
-            Dictionary<string, string> SpecificTruckDetails = new Dictionary<string, string>();
-
-            SpecificTruckDetails.Add("Transporting hazardous materials", m_IsTransportingHazardousMaterials.ToString());
-            SpecificTruckDetails.Add("Cargo volume", m_CargoVolume.ToString());
-
-            return SpecificTruckDetails;
+            return new Dictionary<string, string>
+            {
+                { "Transporting hazardous materials", m_IsTransportingHazardousMaterials.ToString() },
+                { "Cargo volume", m_CargoVolume.ToString() }
+            };
         }
 
         public override List<string> RequestAdditionalVehicleDetails()

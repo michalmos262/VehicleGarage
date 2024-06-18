@@ -1,5 +1,4 @@
-﻿
-using Ex03.GrarageLogic;
+﻿using Ex03.GrarageLogic;
 
 namespace Ex03.GarageLogic
 {
@@ -14,6 +13,7 @@ namespace Ex03.GarageLogic
                 return r_VehicleTypeNames;
             }
         }
+
         public enum eVehicleType
         {
             FuelCar = 1,

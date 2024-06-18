@@ -35,7 +35,7 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                if (value <= r_MaxAirPressureByManufacturer)
+                if (value <= r_MaxAirPressureByManufacturer && value >= 0)
                 {
                     m_CurrentAirPressure = value;
                 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Ex03.GarageLogic
 {
@@ -38,6 +37,14 @@ namespace Ex03.GarageLogic
             get
             {
                 return m_OwnerName;
+            }
+        }
+
+        public string OwnerPhoneNumber
+        {
+            get
+            {
+                return m_OwnerPhoneNumber;
             }
         }
 

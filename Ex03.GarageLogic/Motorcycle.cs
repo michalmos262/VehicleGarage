@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using static Ex03.GarageLogic.FuelTank;
-using static Ex03.GarageLogic.Motorcycle;
 
 namespace Ex03.GarageLogic
 {
@@ -100,7 +99,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override FuelTank.eFuelType FuelType
+        public override eFuelType FuelType
         {
             get
             {
@@ -137,12 +136,11 @@ namespace Ex03.GarageLogic
 
         public override Dictionary<string, string> GetSpecificVehicleTypeDetails()
         {
-            Dictionary<string, string> SpecificMotorcycleDetails = new Dictionary<string, string>();
-
-            SpecificMotorcycleDetails.Add("Licence type", m_LicenseType.ToString());
-            SpecificMotorcycleDetails.Add("Engine volume", m_EngineVolumeInCC.ToString());
-
-            return SpecificMotorcycleDetails;
+            return new Dictionary<string, string>
+            {
+                { "Licence type", m_LicenseType.ToString() },
+                { "Engine volume", m_EngineVolumeInCC.ToString() }
+            };
         }
 
         public override List<string> RequestAdditionalVehicleDetails()
