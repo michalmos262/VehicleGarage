@@ -65,9 +65,9 @@ namespace Ex03.GarageLogic
             m_VehicleRecords[i_LicenseNumber].Vehicle.Engine.ReEnergize(i_AdditionalFuelInLiters, i_FuelType);
         }
 
-        public void ChargeVehicle(string i_LicenseNumber, float i_AdditionalChargingTimeInHours)
+        public void ChargeVehicle(string i_LicenseNumber, float i_AdditionalChargingTimeInMinutes)
         {
-            m_VehicleRecords[i_LicenseNumber].Vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInHours);
+            m_VehicleRecords[i_LicenseNumber].Vehicle.Engine.ReEnergize(i_AdditionalChargingTimeInMinutes / 60);
         }
 
         public void ChangeVehicleStatus(string i_LicenseNumber, VehicleRecordInGarage.eVehicleStatus i_NewVehicleStatus)

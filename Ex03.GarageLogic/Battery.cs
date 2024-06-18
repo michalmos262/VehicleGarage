@@ -10,13 +10,13 @@ namespace Ex03.GarageLogic
 
         }
 
-        public override void ReEnergize(float i_AdditionalEnergyAmount, FuelTank.eFuelType? i_FuelType = null)
+        public override void ReEnergize(float i_AdditionalChargingTimeInHours, FuelTank.eFuelType? i_FuelType = null)
         {
             if (i_FuelType.HasValue)
             {
                 throw new ArgumentException("Can't refuel a vehicle uses battery!");
             }
-            CurrentEnergyAmount += i_AdditionalEnergyAmount;
+            CurrentEnergyAmount += i_AdditionalChargingTimeInHours;
         }
 
         public override Dictionary<string, string> GetSpecificEnergyTypeDetails()
